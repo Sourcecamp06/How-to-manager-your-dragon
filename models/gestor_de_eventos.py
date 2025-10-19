@@ -5,6 +5,9 @@ class GestorEventos:
     def __init__(self):
         self.event=[]
 
+        #Tipos de eventos
+        self.type_of_events = ["Peleas entre vikingos", "Peleas entre vikingos montados en dragones", "Peleas de vikingos contra dragones", "Excursiones para domesticar dragones", "Competencia de encestar la oveja", "Entrenamiento de vuelo"]
+
         #Arenas
         self.arenas = ["Arena principal", "Arena secundaria1", "Arena secundaria2", "Playa", "Guarida de dragones"]
 
@@ -13,6 +16,20 @@ class GestorEventos:
 
         #Guerreros randoms
         self.randoms_warriors = {"Guerreros de Berk":5, "Guerreras de Berk":5, "Ancianos de Berk":5}
+
+        #Dragones de la franquicia
+        self.franquicia_dragons = ["Chimuelo", "Astrid", "Patán", "Patapez", "Brutacio", "Brutilda", "Estoico", "Bocón", "Valka"]
+
+        #Dragones libres
+        self.free_dragons = {
+            "Terror Terrible": 5,
+            "Nadder Mortal": 3,
+            "Gronckle": 2,
+            "Cremallerus Espantosu": 3,
+            "Monstrous Nightmare": 3,
+            "Light Fury": 1,
+            "Thunderdrum": 1
+        }
 
         #Asignacion de dragones-duenios
         self.dragons_properties = {
@@ -24,17 +41,6 @@ class GestorEventos:
             "Monstrous Nightmare": "Patán",
             "Skullcrusher": "Estoico",
             "Stormcutter": "Valka"
-        }
-        
-        #Dragones libres
-        self.free_dragons = {
-            "Terror Terrible": 5,
-            "Nadder Mortal": 3,
-            "Gronckle": 2,
-            "Cremallerus Espantosu": 3,
-            "Monstrous Nightmare": 3,
-            "Light Fury": 1,
-            "Thunderdrum": 1
         }
 
         #Armas
