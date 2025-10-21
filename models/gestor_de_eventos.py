@@ -3,7 +3,7 @@ import json
 
 class GestorEventos:
     def __init__(self):
-        self.event=[]
+        self.eventos=[]
 
         #Tipos de eventos
         self.type_of_events = ["Peleas entre vikingos", "Peleas entre vikingos montados en dragones", "Peleas de vikingos contra dragones", "Excursiones para domesticar dragones", "Competencia de encestar la oveja", "Entrenamiento de vuelo"]
@@ -18,14 +18,14 @@ class GestorEventos:
         self.randoms_warriors = {"Guerreros de Berk":5, "Guerreras de Berk":5, "Ancianos de Berk":5}
 
         #Dragones de la franquicia
-        self.franquicia_dragons = ["Chimuelo", "Astrid", "Patán", "Patapez", "Brutacio", "Brutilda", "Estoico", "Bocón", "Valka"]
+        self.franquicia_dragons = ["Chimuelo", "Tormenta", "Colmillo", "Albondiga", "Eructo y Guácara", "Rompecráneos", "Gruñón", "Brincanubes"]
 
         #Dragones libres
         self.free_dragons = {
             "Terror Terrible": 5,
             "Nadder Mortal": 3,
             "Gronckle": 2,
-            "Cremallerus Espantosu": 3,
+            "Cremallerus Espantosus": 3,
             "Monstrous Nightmare": 3,
             "Light Fury": 1,
             "Thunderdrum": 1
@@ -33,14 +33,14 @@ class GestorEventos:
 
         #Asignacion de dragones-duenios
         self.dragons_properties = {
-            "Night Fury": "Hippo",
-            "Nadder Mortal": "Astrid", 
-            "Gronckle": "Patapez",
-            "Gronckle2": "Bocón",
-            "Cremallerus Espantosu": ["Brutacio", "Brutilda"],
-            "Monstrous Nightmare": "Patán",
-            "Skullcrusher": "Estoico",
-            "Stormcutter": "Valka"
+            "Chimuelo": "Hippo",
+            "Tormenta": "Astrid", 
+            "Albondiga": "Patapez",
+            "Gruñón": "Bocón",
+            "Eructo y Guácara": ["Brutacio", "Brutilda"],
+            "Colmillo": "Patán",
+            "Rompecráneos": "Estoico",
+            "Brincanubes": "Valka"
         }
 
         #Armas
@@ -64,7 +64,7 @@ class GestorEventos:
         self.ovejas = 20
 
         #Registro de participacion diaria
-        self.dayli_participation = {}
+        self.daily_participation = {}
 
         def fecha_actual(self):
             return datetime.now().strftime("%Y-%m-%d")

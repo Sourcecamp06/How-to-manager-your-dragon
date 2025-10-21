@@ -69,7 +69,7 @@
 ## Reglas a seguir
 1-No puede ocurrir más de un evento simultáneamente en una arena
 2-Un guerrero de la franquicia y su dragón solo pueden participar en un evento al día
-3-Para peleas montados en dragones, competencia de encestar la oveja y entrenamiento de vuelo, cada guerrero de la franquicia tiene asignado su dragón por defecto[(Night Fury - Hippo), (Nadder Mortal - Astrid), (Gronckle - Patapez), (Gronckle - Bocón), (Cremallerus Espantosus - Brutacio), (Cremallerus Espantosus ,Brutilda), (Monstrous Nightmare - Patán), (Skullcrusher - Estoico(papá de Hippo)), (Stormcutter - Valka(mamá de Hippo))], además cada dragón con propietario no puede ser utilizado por otro guerrero
+3-Para peleas montados en dragones, competencia de encestar la oveja y entrenamiento de vuelo, cada guerrero de la franquicia tiene asignado su dragón por defecto[(Night Fury - Hippo), (Nadder Mortal - Astrid), (Gronckle - Patapez), (Gronckle - Bocón), (Cremallerus Espantosus - Brutacio), (Cremallerus Espantosus ,Brutilda)(Los hermanos deben ir juntos a la batalla), (Monstrous Nightmare - Patán), (Skullcrusher - Estoico(papá de Hippo)), (Stormcutter - Valka(mamá de Hippo))], además cada dragón con propietario no puede ser utilizado por otro guerrero
 4-Si vas a montar un Cremallerus Espantosus debe tener dos jinetes que lo monten
 5-La competencia de encestar la oveja solo se puede realizar en la playa y las ovejas son exlusivamente para este evento
 6-Las excursiones para domar dragones solo pueden realizarse en la guarida de dragones
