@@ -24,6 +24,7 @@ def duration(self, start_date:datetime, start_time:datetime, finish_date:datetim
     duration = duration.total_seconds()/60
     return duration
 
+#Buscar hueco
 def recomendar_fecha(self):
     actual_duration = self.duration(self.start_date, self.start_time, self.finish_date, self.finish_time)
     durations = []

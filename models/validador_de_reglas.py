@@ -31,7 +31,7 @@ def verificar_participacion_diaria(self, guerreros, dragones, fecha):
 #Regla 3
 def verificar_dragones_con_su_guerrero(self, guerreros, dragones, tipo_evento):
     if tipo_evento in ["Pelea entre vikingos montados en dragones", "Competencia de encestar la oveja", "Entrenamiento de vuelo"]:
-         # Verificar hermanos Brutacio y Brutilda
+        # Verificar hermanos Brutacio y Brutilda
         brutacio_presente = "Brutacio" in guerreros
         brutilda_presente = "Brutilda" in guerreros
     
