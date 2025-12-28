@@ -17,17 +17,17 @@ class Evento:
 
     def to_dict(self):
         return{
-            'title':self.title,
-            'start_date':self.start_date,
-            'start_time':self.start_time,
-            'finish_date':self.finish_date,
-            'finish_time':self.finish_time,
-            'type_of_event':self.type_of_event,
-            'arena':self.arena,
-            'dragons':self.dragons,
-            'warriors':self.warriors,
-            'weapons':self.weapons,
-            'armors':self.armors,
-            'extra':self.extra
+            'title': self.title,
+            'start_date': self.start_date.strftime("%Y-%m-%d") if self.start_date else None, 
+            'start_time': self.start_time.strftime("%H:%M") if self.start_time else None,    
+            'finish_date': self.finish_date.strftime("%Y-%m-%d") if self.finish_date else None,
+            'finish_time': self.finish_time.strftime("%H:%M") if self.finish_time else None,
+            'type_of_event': self.type_of_event,
+            'arena': self.arena,
+            'dragons': self.dragons,
+            'warriors': self.warriors,
+            'weapons': self.weapons,
+            'armors': self.armors,
+            'extra': self.extra
         }
     

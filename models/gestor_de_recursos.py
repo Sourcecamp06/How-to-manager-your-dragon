@@ -57,7 +57,8 @@ class GestorEventos:
             "Cascos vikingos": 10,
             "Pecheras de cuero": 10,
             "Pantalones de cuero": 10, 
-            "Botas de hierro": 10
+            "Botas de hierro": 10,
+            "Cinturones de cuero":10
         }
 
         #ovejas

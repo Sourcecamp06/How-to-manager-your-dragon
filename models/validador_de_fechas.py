@@ -1,15 +1,15 @@
-from datetime import datetime, timedelta, strptime 
+from datetime import datetime, timedelta
 
 #Verificacion de si la arena esta disponible en la fecha y hora especificadas
 def verificar_disponibilidad_arena(self, arena, new_start_date, new_start_time, new_finish_date, new_finish_time):
     for evento in self.eventos:
         if evento.arena == arena and evento.start_date == new_start_date:
 
-            inicio_existente = strptime(f"{evento.start_date} {evento.start_time}", "%Y-%m-%d %H:%M")
-            fin_existente = strptime(f"{evento.finish_date} {evento.finish_time}", "%Y-%m-%d %H:%M") - inicio_existente
+            inicio_existente = datetime.strptime(f"{evento.start_date} {evento.start_time}", "%Y-%m-%d %H:%M")
+            fin_existente = datetime.strptime(f"{evento.finish_date} {evento.finish_time}", "%Y-%m-%d %H:%M") - inicio_existente
             
-            inicio_nuevo = strptime(f"{new_start_date} {new_start_time}", "%Y-%m-%d %H:%M")
-            fin_nuevo = strptime(f"{new_finish_date} {new_finish_time}", "%Y-%m-%d %H:%M") - inicio_nuevo 
+            inicio_nuevo = datetime.strptime(f"{new_start_date} {new_start_time}", "%Y-%m-%d %H:%M")
+            fin_nuevo = datetime.strptime(f"{new_finish_date} {new_finish_time}", "%Y-%m-%d %H:%M") - inicio_nuevo 
             
             if ((inicio_nuevo >= inicio_existente and inicio_nuevo <= fin_existente) or (fin_nuevo >= inicio_existente and fin_nuevo <= fin_existente) or (inicio_nuevo <= inicio_existente and fin_nuevo >= fin_existente)):
                 return False
