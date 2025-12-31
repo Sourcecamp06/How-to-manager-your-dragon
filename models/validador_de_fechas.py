@@ -12,7 +12,7 @@ def verificar_disponibilidad_arena(self, arena, new_start_date, new_start_time, 
             fin_nuevo = datetime.strptime(f"{new_finish_date} {new_finish_time}", "%Y-%m-%d %H:%M") - inicio_nuevo 
             
             if ((inicio_nuevo >= inicio_existente and inicio_nuevo <= fin_existente) or (fin_nuevo >= inicio_existente and fin_nuevo <= fin_existente) or (inicio_nuevo <= inicio_existente and fin_nuevo >= fin_existente)):
-                return False
+                return False, "La arena no esta disponible en este horario"
             
     return True
 
@@ -30,3 +30,4 @@ def recomendar_fecha(self):
     durations = []
     for i in range(len(self.eventos)-1):
         durations.append(self.duration(self.eventos[i+1].start_date, self.eventos[i+1].start_time, self.eventos[i].finish_date, self.eventos[i].finish_time))
+

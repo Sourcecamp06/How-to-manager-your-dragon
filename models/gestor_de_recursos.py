@@ -9,7 +9,7 @@ class GestorEventos:
         self.type_of_events = ["Pelea entre vikingos", "Pelea entre vikingos montados en dragones", "Pelea de vikingos contra dragones", "Excursion para domesticar dragones", "Competencia de encestar la oveja", "Entrenamiento de vuelo"]
 
         #Arenas
-        self.arenas = ["Arena principal", "Arena secundaria1", "Arena secundaria2", "Playa", "Guarida de dragones"]
+        self.arenas = ["Arena legendaria de Berk", "Cúspide de los guerreros caídos", "Arena del jefe vikingo", "Playa", "Guarida de dragones"]
 
         #Guerreros de la franquicia
         self.franquicia_warriors = ["Hippo", "Astrid", "Patán", "Patapez", "Brutacio", "Brutilda", "Estoico", "Bocón", "Valka"]

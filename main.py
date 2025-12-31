@@ -1,6 +1,6 @@
 import streamlit as st
 import base64
-from test import pagina_formulario
+from UI.page.form import pagina_formulario
 
 def get_base64_of_bin_file(bin_file):
     with open(bin_file, 'rb') as f:
@@ -104,7 +104,7 @@ st.markdown(f"""
 </style>
 """, unsafe_allow_html=True)
 
-if st.session_state.page == "home":
+def main_menu():
     # Contenedor principal
     st.markdown("""
     <div class="main-container">
@@ -135,10 +135,9 @@ if st.session_state.page == "home":
 # --- Router de páginas ---
 page = st.session_state.page
 
+if page == "home":
+    main_menu()
 if page == "añadir_evento":
     pagina_formulario()
 # elif page == "eventos_activos":
 #     pagina_eventos_activos()
-else:
-    # Home por defecto (título y botones que ya tienes)
-    pass

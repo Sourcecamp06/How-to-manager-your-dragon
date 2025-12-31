@@ -14,8 +14,29 @@ if "gestor" not in st.session_state:
 gestor = st.session_state.gestor
 
 def pagina_formulario():
-    st.markdown("<h2 style='text-align: center; background-color:rgb(202, 48, 1), font-family: Georgia, serif;'>Crea tu nuevo evento</h2>", unsafe_allow_html=True)
+    st.markdown("""<h2 class="header">Crea tu nuevo evento</h2>""", unsafe_allow_html=True)
 
+    st.markdown(f"""
+    <style>
+        .header{{
+            justify-content:center;
+            margin-top: 30px;
+            font-family: Georgia, serif;
+            color: rgb(202, 48, 1);
+            font-size: 60px; 
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 0;
+            padding: 10px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: fit-content;
+            box-sizing: border-box;
+        }}
+    </style>
+    """,  unsafe_allow_html=True)
 
     # Convertir la imagen local a base64
     def get_base64_of_bin_file(bin_file):
@@ -59,6 +80,37 @@ def pagina_formulario():
 
     st.markdown("""
     <style>          
+    div.stButton > button:first-child {
+        letter-spacing: 1px;
+        font-weight: 900 !important;
+        font-family: Georgia, serif !important;
+        color: rgb(255, 255, 255) !important;
+        font-size: 40px !important; 
+        background-color: rgb(202, 48, 1) !important;
+        width: 220px !important;
+        border-radius: 15px !important;
+        box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.7) !important;
+        padding: 15px !important;
+        cursor: pointer !important;
+        transition: transform 0.3s ease !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+        border: none !important;
+        text-decoration: none !important;
+        height: auto !important;
+        min-height: 70px !important;
+    }
+    
+    div.stButton > button:first-child:hover {
+        transform: scale(1.1) !important;
+        background-color: rgb(170, 40, 0) !important;
+        box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.9) !important;
+        text-decoration: none !important;
+    }
+
     /* Aplicar fuente a elementos específicos */
 
     /* 1. Contenido principal de la app */
@@ -140,6 +192,24 @@ def pagina_formulario():
         align-items: center !important;
         gap: 8px !important;
     }
+
+    .header{
+        justify-content:center;
+        margin-top: 30px;
+        font-family: Georgia, serif;
+        color: rgb(202, 48, 1) !important;
+        font-size: 60px !important; 
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        margin: 0;
+        padding: 10px; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: fit-content;
+        box-sizing: border-box;
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -218,18 +288,54 @@ def pagina_formulario():
             st.session_state.clear()
             st.rerun()
 
-
-
         if submitted:
-            # Validaciones básicas
-            disponible = True  # aquí podrías llamar a verificar_disponibilidad_arena
-            participacion_ok, msg = verificar_participacion_diaria(warriors, dragons, str(start_date))
-
-            if not participacion_ok:
+            #Regla 1: Verificar disponibilidad de arena
+            disponibilidad_arena, msg=verificar_disponibilidad_arena(gestor, arena, start_date, start_time, finish_date, finish_time)
+            if not disponibilidad_arena:
                 st.error(msg)
+                return
+            #Regla 2: Verificar participacion diaria
+            participacion_diaria, msg = verificar_participacion_diaria(gestor, warriors, dragons, str(start_date)) 
+            if not participacion_diaria: 
+                st.error(msg) 
+                return
+            #Regla 3: Verificar dragones con sus guerreros
+            dragones_con_sus_guerreros, msg = verificar_dragones_con_su_guerrero(gestor, warriors, dragons, type_of_event) 
+            if not dragones_con_sus_guerreros: 
+                st.error(msg) 
+                return
+            #Regla 4: Veificacion del Cremallerus
+            cremallerus_ok, msg = verificacion_del_cremallerus(gestor, dragons, warriors, type_of_event) 
+            if not cremallerus_ok: 
+                st.error(msg) 
+                return
+            #Regla 5: Verificacion del evento de las ovejas
+            ovejas_ok, msg = verificacion_evento_ovejas(gestor, type_of_event, arena, ovejas_selected) 
+            if not ovejas_ok: 
+                st.error(msg) 
+                return
+            #Regla 6: Verificacion del evento excursion
+            ovejas_ok, msg = verificacion_evento_ovejas(gestor, type_of_event, arena, ovejas_selected) 
+            if not ovejas_ok: 
+                st.error(msg) 
+                return
+
             else: 
-                evento = Evento( title, start_date, start_time, finish_date, finish_time, type_of_event, arena, warriors + sum([[w]*c for w,c in randoms_selected.items()], []), dragons + sum([[d]*c for d,c in free_dragons_selected.items()], []), [w for w,c in weapons_selected.items() for _ in range(c)], [a for a,c in armors_selected.items() for _ in range(c)], ovejas_selected ) 
-                gestor.eventos.append(evento) 
+                new_evento = Evento( 
+                    title, 
+                    start_date,
+                    start_time, 
+                    finish_date, 
+                    finish_time, 
+                    type_of_event, 
+                    arena,
+                    warriors + sum([[w]*c for w,c in randoms_selected.items()], []), 
+                    dragons + sum([[d]*c for d,c in free_dragons_selected.items()], []), 
+                    [w for w,c in weapons_selected.items() for _ in range(c)], 
+                    [a for a,c in armors_selected.items() for _ in range(c)], 
+                    ovejas_selected 
+                    ) 
+                gestor.eventos.append(new_evento) 
                 # Restar recursos del almacén 
                 for grupo, cantidad in randoms_selected.items(): 
                     gestor.randoms_warriors[grupo] -= cantidad 
