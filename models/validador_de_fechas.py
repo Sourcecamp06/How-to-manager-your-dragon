@@ -14,10 +14,10 @@ def verificar_disponibilidad_arena(self, arena, new_start_date, new_start_time, 
             if ((inicio_nuevo >= inicio_existente and inicio_nuevo <= fin_existente) or (fin_nuevo >= inicio_existente and fin_nuevo <= fin_existente) or (inicio_nuevo <= inicio_existente and fin_nuevo >= fin_existente)):
                 return False, "La arena no esta disponible en este horario"
             
-    return True
+    return True, ""
 
 #Duracion de eventos
-def duration(self, start_date:datetime, start_time:datetime, finish_date:datetime, finish_time:datetime):
+def duration(start_date:datetime, start_time:datetime, finish_date:datetime, finish_time:datetime):
     start = datetime.combine(start_date, start_time)
     finish = datetime.combine(finish_date, finish_time)
     duration = abs(finish - start)
@@ -25,9 +25,21 @@ def duration(self, start_date:datetime, start_time:datetime, finish_date:datetim
     return duration
 
 #Buscar hueco
-def recomendar_fecha(self):
-    actual_duration = self.duration(self.start_date, self.start_time, self.finish_date, self.finish_time)
-    durations = []
-    for i in range(len(self.eventos)-1):
-        durations.append(self.duration(self.eventos[i+1].start_date, self.eventos[i+1].start_time, self.eventos[i].finish_date, self.eventos[i].finish_time))
+def recomendar_fecha(gestor, arena, start_date:datetime, start_time:datetime, finish_date:datetime, finish_time:datetime):
+    actual_duration = duration(start_date, start_time, finish_date, finish_time)
+    events_list=[]
+    for evento in gestor.eventos:
+        if arena == evento.arena:
+            events_list.append(evento)
+    for i in range(len(events_list)):
+        for j in range(i, len(events_list)):
+            if events_list[i].start_date > events_list[j].start_date:
+                events_list[i], events_list[j] = events_list[j], events_list[i]
+    actual_inicio= datetime.combine(start_date, start_time) 
 
+    for i in range(1, len(events_list)):
+        nuevo_inicio = datetime.combine(events_list[i].start_date, events_list[i].start_time)
+        if duration(events_list[i-1].finish_date, events_list[i-1].finish_time, events_list[i].start_date, events_list[i].start_time) >= actual_duration and  nuevo_inicio >= actual_inicio:
+            return f"Fecha recomendada: {events_list[i-1].finish_date} a las {events_list[i-1].finish_time}"
+    else: 
+        return f"Fecha recomendada: {events_list[len(events_list)-1].finish_date} a las {events_list[len(events_list)-1].finish_time}"

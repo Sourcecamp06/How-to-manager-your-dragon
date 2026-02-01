@@ -1,6 +1,6 @@
 # How to manager your dragon
 
-Érase una vez en la Isla de Berk un programador(sí, un programador en esa era, no juzgue XD) el cuál tenía una tarea, realizar un organizador de peleas vikingas y distintos tipos de eventos que se celebran en esta isla. Dicho organizador debia gestionar una serie de recursos para cada evento y seguir ciertas reglas de la isla.
+Érase una vez en la Isla de Berk un programador(sí, un programador en esa era) el cuál tenía una tarea: realizar un organizador de peleas vikingas y distintos tipos de eventos que se celebran en esta isla. Dicho organizador debía gestionar una serie de recursos para cada evento y seguir ciertas reglas de la isla.
 
 ## 📯 Tipos de eventos
 
@@ -13,11 +13,11 @@
 
 ## 🏟 Arenas
 
-- Arena principal
-- Arena secundaria1
-- Arena secundaria2
-- Playa
-- Guarida de dragones
+- "Arena legendaria de Berk" 
+- "Cúspide de los guerreros caídos" 
+- "Arena del jefe vikingo"
+- "Playa"
+- "Guarida de dragones"
 
 ## 🤺 Guerreros
 
@@ -30,57 +30,90 @@
 - Estoico
 - Bocón
 - Valka
+
 - Guerreros de Berk:5
 - Guerreras de Berk:5
 - Ancianos de Berk:5
 
 ## 🐉 Dragones 
 
-- Terror Terrible:5
-- Nadder Mortal:3+1(Propiedad de Astrid)
-- Gronckle:2+1(Propiedad de Patapez)+1(Propiedad de Bocón)
-- Cremallerus Espantosu:3+1(Propiedad de Brutacio y Brutilda)
-- Monstrous Nightmare:3+1(Propiedad de Patán)
-- Night Fury:1(Propiedad de Hippo)
-- Skullcrusher:1(Propiedad de Estoico)
-- Stormcutter:1(Propiedad de Valka)
-- Light Fury:1
-- Thunderdrum:1
+- Chimuelo:1
+- Tormenta:1
+- Colmillo:1
+- Albondiga:1
+- Eructo y Guácara:1
+- Rompecráneos:1
+- Gruñón:1
+- Brincanubes:1
+
+- Terror Terrible: 5
+- Nadder Mortal: 3
+- Gronckle: 2
+- Cremallerus Espantosus: 3
+- Monstrous Nightmare: 3
+- Light Fury: 1
+- Thunderdrum: 1
 
 ## ⚔️ Armas
 
-- Escudos:8
-- Mazos:8
-- Espadas:8
-- Ballestas:3
-- Catapulta:1
+- Escudos: 8
+- Mazos: 8
+- Espadas: 8
+- Ballestas: 3
+- Catapulta: 1
 
 ## 🛡 Armaduras
 
-- Cascos vikingos:10
-- Pecheras de cuero:10
-- Pantalones de cuero:10
-- Botas de hierro:10
+- Cascos vikingos: 10
+- Pecheras de cuero: 10
+- Pantalones de cuero: 10
+- Botas de hierro: 10
 
 ## 🐏 Extras
 
-- Ovejas:20
+- Ovejas: 20
 
 ## 📋 Reglas a seguir
 1. No puede ocurrir más de un evento simultáneamente en una arena
 2. Un guerrero de la franquicia y su dragón solo pueden participar en un evento al día
-3. Para peleas montados en dragones, competencia de encestar la oveja y entrenamiento de vuelo, cada guerrero de la franquicia tiene asignado su dragón por defecto[(Night Fury - Hippo), (Nadder Mortal - Astrid), (Gronckle - Patapez), (Gronckle - Bocón), (Cremallerus Espantosus - Brutacio), (Cremallerus Espantosus ,Brutilda)(Los hermanos deben ir juntos a la batalla), (Monstrous Nightmare - Patán), (Skullcrusher - Estoico(papá de Hippo)), (Stormcutter - Valka(mamá de Hippo))], además cada dragón con propietario no puede ser utilizado por otro guerrero
+3. Para peleas montados en dragones, competencia de encestar la oveja y entrenamiento de vuelo, cada guerrero de la franquicia tiene asignado su dragón por defecto[(Chimuelo - Hippo), (Tormenta - Astrid), (Albondiga - Patapez), (Gruñón - Bocón), (Eructo y Guácara - Brutacio), (Eructo y Guácara - Brutilda)(Los hermanos deben ir juntos a la batalla), (Colmillo - Patán), (Rompecráneos - Estoico(papá de Hippo)), (Brincanubes - Valka(mamá de Hippo))], además cada dragón con propietario no puede ser utilizado por otro guerrero
 4. Si vas a montar un Cremallerus Espantosus debe tener dos jinetes que lo monten
 5. La competencia de encestar la oveja solo se puede realizar en la playa y las ovejas son exclusivamente para este evento
 6. Las excursiones para domar dragones solo pueden realizarse en la guarida de dragones
+7. Para los eventos de Peleas entre vikingos montados en dragones, Peleas de vikingos contra
+dragones, Competencia de encestar la oveja y Entrenamiento de vuelo es obligatorio escoger al menos un dragón
+8. Para las competencias entre vikingos no se puede escoger dragones
+9. Hippo no se lleva muy bien con Patán y Bocón no se lleva muy bien con Estoico, así q no pueden estar juntos en ningun tipo de evento
 
-## ✨ Características del programa
-- ✅ Gestión de múltiples tipos de eventos
-- 🐉 Control de dragones y sus jinetes
-- 🏟 Asignación inteligente de arenas
-- ⚔️ Administración de armas y armaduras
-- 📊 Seguimiento de reglas de Berk
-- 🔄 Sistema de restricciones diarias
+## 🚀 Características del Programa
+
+### Gestión de Eventos
+- Creación de eventos con múltiples tipos
+- Validación automática de reglas de Berk
+- Asignación inteligente de recursos
+
+### Sistema de Recursos
+- Inventario en tiempo real de dragones, guerreros y equipo
+- Control de disponibilidad diaria
+- Prevención de sobreasignación
+
+### Interfaz de Usuario
+- Dashboard interactivo con Streamlit
+- Formularios intuitivos con validación
+- Visualización de eventos programados
+
+## 🏗️ Estructura del Proyecto
+<!-- ├──assets/
+├──models/
+│ ├── creador_de_eventos.py # Clase Evento
+│ ├── gestor_de_recursos.py # Clase GestorEventos
+│ ├── validador_de_fechas.py # Validaciones de tiempo
+│ └── validador_de_reglas.py # Reglas de negocio
+├── form.py # Interfaz Streamlit
+├── requirements.txt
+├── README.md
+└── 
+└── main.png -->
 
 ### Ejemplo de uso
     pass

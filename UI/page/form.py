@@ -102,7 +102,7 @@ def pagina_formulario():
         text-decoration: none !important;
         height: auto !important;
         min-height: 70px !important;
-    }
+}
     
     div.stButton > button:first-child:hover {
         transform: scale(1.1) !important;
@@ -290,35 +290,53 @@ def pagina_formulario():
 
         if submitted:
             #Regla 1: Verificar disponibilidad de arena
-            disponibilidad_arena, msg=verificar_disponibilidad_arena(gestor, arena, start_date, start_time, finish_date, finish_time)
+            disponibilidad_arena, msg= verificar_disponibilidad_arena(gestor, arena, start_date, start_time, finish_date, finish_time)
             if not disponibilidad_arena:
                 st.error(msg)
-                return
+                st.stop()
             #Regla 2: Verificar participacion diaria
             participacion_diaria, msg = verificar_participacion_diaria(gestor, warriors, dragons, str(start_date)) 
             if not participacion_diaria: 
                 st.error(msg) 
-                return
+                st.stop()
             #Regla 3: Verificar dragones con sus guerreros
             dragones_con_sus_guerreros, msg = verificar_dragones_con_su_guerrero(gestor, warriors, dragons, type_of_event) 
             if not dragones_con_sus_guerreros: 
                 st.error(msg) 
-                return
+                st.stop()
             #Regla 4: Veificacion del Cremallerus
             cremallerus_ok, msg = verificacion_del_cremallerus(gestor, dragons, warriors, type_of_event) 
             if not cremallerus_ok: 
                 st.error(msg) 
-                return
+                st.stop()
             #Regla 5: Verificacion del evento de las ovejas
             ovejas_ok, msg = verificacion_evento_ovejas(gestor, type_of_event, arena, ovejas_selected) 
             if not ovejas_ok: 
                 st.error(msg) 
-                return
+                st.stop()
+            
             #Regla 6: Verificacion del evento excursion
-            ovejas_ok, msg = verificacion_evento_ovejas(gestor, type_of_event, arena, ovejas_selected) 
-            if not ovejas_ok: 
+            excursion_ok, msg = verificacion_evento_excursion(gestor, type_of_event, arena) 
+            if not excursion_ok: 
                 st.error(msg) 
-                return
+                st.stop()
+
+            #Regla 7: Verificacion de dragones obligatorios
+            oblig_ok, msg = verificacion_dragones_obligatorios(gestor, type_of_event, free_dragons_selected, dragons)
+            if not oblig_ok:
+                st.error(msg)
+                st.stop()
+                
+            #Regla 8: Verificacion de dragones innecesarios
+            innece_ok, msg = verificacion_no_dragones(gestor, type_of_event, free_dragons_selected, dragons)
+            if not innece_ok:
+                st.error(msg)
+                st.stop()
+
+            colisiones_ok, msg = colision_personajes(gestor, warriors)
+            if not colisiones_ok:
+                st.error(msg)
+                st.stop
 
             else: 
                 new_evento = Evento( 
@@ -346,6 +364,13 @@ def pagina_formulario():
                 for armadura, cantidad in armors_selected.items(): 
                     gestor.armors[armadura] -= cantidad 
                 gestor.ovejas -= ovejas_selected 
+
+                fecha_str = str(start_date) 
+                if fecha_str not in gestor.daily_participation: 
+                    gestor.daily_participation[fecha_str] = {"guerreros": set(), "dragones": set()} 
+                gestor.daily_participation[fecha_str]["guerreros"].update(new_evento.warriors) 
+                gestor.daily_participation[fecha_str]["dragones"].update(new_evento.dragons)
+
                 st.success(f"Evento '{title}' creado exitosamente 🎉")
 
     st.markdown("""

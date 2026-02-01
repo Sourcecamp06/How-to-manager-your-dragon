@@ -68,5 +68,6 @@ class GestorEventos:
         self.daily_participation = {}
 
     def fecha_actual(self):
-        return datetime.now().strftime("%Y-%m-%d")
+        return datetime.now().date()
+
 

@@ -1,7 +1,7 @@
-import datetime
+from datetime import date, time, datetime
 import json
 class Evento:
-    def __init__(self, title:str, start_date:datetime, start_time:datetime, finish_date:datetime, finish_time:datetime, type_of_event:str, arena:str, warriors=None, dragons=None, weapons=None, armors=None, extra=None):
+    def __init__(self, title:str, start_date:date, start_time:time, finish_date:date, finish_time:time, type_of_event:str, arena:str, franquicia_warriors=None, randoms_warriors=None, franquicia_dragons=None, free_dragons=None, weapons=None, armors=None, extra=None):
         self.title=title
         self.start_date=start_date
         self.start_time=start_time
@@ -9,8 +9,8 @@ class Evento:
         self.finish_time=finish_time
         self.type_of_event=type_of_event
         self.arena=arena
-        self.dragons=dragons if dragons else []
-        self.warriors=warriors if warriors else []
+        self.warriors = franquicia_warriors + randoms_warriors if franquicia_warriors or randoms_warriors else []
+        self.dragons = franquicia_dragons + free_dragons if franquicia_dragons or free_dragons else []
         self.weapons=weapons if weapons else []
         self.armors=armors if armors else []
         self.extra=extra

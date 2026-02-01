@@ -1,6 +1,7 @@
 import streamlit as st
 import base64
 from UI.page.form import pagina_formulario
+from UI.page.events import pagina_eventos_activos
 
 def get_base64_of_bin_file(bin_file):
     with open(bin_file, 'rb') as f:
@@ -132,6 +133,7 @@ def main_menu():
     </div>
     """, unsafe_allow_html=True)
 
+
 # --- Router de páginas ---
 page = st.session_state.page
 
@@ -139,5 +141,5 @@ if page == "home":
     main_menu()
 if page == "añadir_evento":
     pagina_formulario()
-# elif page == "eventos_activos":
-#     pagina_eventos_activos()
+elif page == "eventos_activos":
+    pagina_eventos_activos()
