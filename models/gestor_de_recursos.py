@@ -1,5 +1,7 @@
-from datetime import datetime, timedelta
+from datetime import datetime, date, time
 import json
+import os
+from .creador_de_eventos import Evento
 
 class GestorEventos:
     def __init__(self):
@@ -67,6 +69,8 @@ class GestorEventos:
         #Registro de participacion diaria
         self.daily_participation = {}
 
+        self.cargar_desde_json()
+
     def verificar_recursos_disponibles(self, recursos_solicitados):
         pass
 
@@ -86,7 +90,7 @@ class GestorEventos:
         return True, ""
 
     #Duracion de eventos
-    def duration(start_date:datetime, start_time:datetime, finish_date:datetime, finish_time:datetime):
+    def duration(self, start_date:datetime, start_time:datetime, finish_date:datetime, finish_time:datetime):
         start = datetime.combine(start_date, start_time)
         finish = datetime.combine(finish_date, finish_time)
         duration = abs(finish - start)
@@ -112,6 +116,101 @@ class GestorEventos:
                 return f"Fecha recomendada: {events_list[i-1].finish_date} a las {events_list[i-1].finish_time}"
         else: 
             return f"Fecha recomendada: {events_list[len(events_list)-1].finish_date} a las {events_list[len(events_list)-1].finish_time}"
+
+    
+    def guardar_en_json(self):
+        """Guarda todos los eventos y recursos actuales en JSON"""
+        try:
+            # Preparar datos para guardar
+            datos = {
+                "eventos": [evento.to_dict() for evento in self.eventos],
+                "recursos_actuales": {
+                    "randoms_warriors": self.randoms_warriors,
+                    "free_dragons": self.free_dragons,
+                    "weapons": self.weapons,
+                    "armors": self.armors,
+                    "ovejas": self.ovejas
+                },
+                "daily_participation": {
+                    fecha: {
+                        "guerreros": list(datos["guerreros"]),
+                        "dragones": list(datos["dragones"])
+                    }
+                    for fecha, datos in self.daily_participation.items()
+                },
+                "fecha_ultima_actualizacion": datetime.now().isoformat()
+            }
+            
+            # Guardar en archivo
+            with open(self.archivo_json, 'w', encoding='utf-8') as f:
+                json.dump(datos, f, indent=2, ensure_ascii=False)
+            
+            return True, f"Datos guardados en {self.archivo_json}"
+        except Exception as e:
+            return False, f"Error al guardar: {e}"
+    
+    def cargar_desde_json(self):
+        """Carga eventos y recursos desde JSON"""
+        try:
+            if not os.path.exists(self.archivo_json):
+                return False, f"Archivo {self.archivo_json} no existe"
+            
+            with open(self.archivo_json, 'r', encoding='utf-8') as f:
+                datos = json.load(f)
+            
+            # Restaurar eventos
+            self.eventos = []
+            for evento_data in datos.get("eventos", []):
+                # Convertir strings a objetos date/time
+                evento = Evento(
+                    title=evento_data['title'],
+                    start_date=date.fromisoformat(evento_data['start_date']),
+                    start_time=time.fromisoformat(evento_data['start_time']),
+                    finish_date=date.fromisoformat(evento_data['finish_date']),
+                    finish_time=time.fromisoformat(evento_data['finish_time']),
+                    type_of_event=evento_data['type_of_event'],
+                    arena=evento_data['arena'],
+                    franquicia_warriors=evento_data.get('franquicia_warriors', []),
+                    randoms_warriors=evento_data.get('randoms_warriors', []),
+                    franquicia_dragons=evento_data.get('franquicia_dragons', []),
+                    free_dragons=evento_data.get('free_dragons', []),
+                    weapons=evento_data.get('weapons', []),
+                    armors=evento_data.get('armors', []),
+                    extra=evento_data.get('extra', 0)
+                )
+                self.eventos.append(evento)
+            
+            # Restaurar recursos
+            recursos = datos.get("recursos_actuales", {})
+            self.randoms_warriors = recursos.get("randoms_warriors", self.randoms_warriors)
+            self.free_dragons = recursos.get("free_dragons", self.free_dragons)
+            self.weapons = recursos.get("weapons", self.weapons)
+            self.armors = recursos.get("armors", self.armors)
+            self.ovejas = recursos.get("ovejas", self.ovejas)
+            
+            # Restaurar participación diaria
+            daily_data = datos.get("daily_participation", {})
+            self.daily_participation = {
+                fecha: {
+                    "guerreros": set(datos["guerreros"]),
+                    "dragones": set(datos["dragones"])
+                }
+                for fecha, datos in daily_data.items()
+            }
+            
+            return True, f"Datos cargados desde {self.archivo_json}"
+        except Exception as e:
+            return False, f"Error al cargar: {e}"
+    
+    def auto_guardar(self):
+        """Guarda automáticamente después de cambios importantes"""
+        return self.guardar_en_json()
+    
+    def obtener_estado_json(self):
+        """Muestra cómo se ven los datos en JSON (para debugging)"""
+        if self.eventos:
+            return json.dumps(self.eventos[0].to_dict(), indent=2, ensure_ascii=False)
+        return "No hay eventos para mostrar"
 
 
     def fecha_actual(self):

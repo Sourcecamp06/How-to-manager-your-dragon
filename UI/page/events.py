@@ -87,7 +87,7 @@ def pagina_eventos_activos():
                     for armadura in gestor.armors.keys():
                         count = sum(1 for a in evento_eliminado.armors if a == armadura)
                         gestor.armors[armadura] += count
-                    if hasattr(evento_eliminado, "extra"):
+                    if hasattr(evento_eliminado, "extra") and evento_eliminado is not None:
                         gestor.ovejas += evento_eliminado.extra
                     st.success(f"✅ Evento '{evento_eliminado.title}' eliminado y recursos devueltos")
                     st.rerun()
