@@ -86,7 +86,7 @@ class GestorEventos:
         return True, ""
 
     #Duracion de eventos
-    def duration(start_date:datetime, start_time:datetime, finish_date:datetime, finish_time:datetime):
+    def duration(self, start_date:datetime, start_time:datetime, finish_date:datetime, finish_time:datetime):
         start = datetime.combine(start_date, start_time)
         finish = datetime.combine(finish_date, finish_time)
         duration = abs(finish - start)
