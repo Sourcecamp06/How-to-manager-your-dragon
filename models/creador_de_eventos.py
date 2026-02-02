@@ -1,7 +1,7 @@
 from datetime import date, time, datetime
 import json
 class Evento:
-    def __init__(self, title:str, start_date:date, start_time:time, finish_date:date, finish_time:time, type_of_event:str, arena:str, franquicia_warriors=None, randoms_warriors=None, franquicia_dragons=None, free_dragons=None, weapons=None, armors=None, extra=0):
+    def __init__(self, title:str, start_date:date, start_time:time, finish_date:date, finish_time:time, type_of_event:str, arena:str, franquicia_warriors=None, randoms_warriors=None, franquicia_dragons=None, free_dragons=None, weapons=None, armors=None, extra=None):
         
         if finish_date < start_date:
             raise ValueError("La fecha de fin no puede ser anterior a la de inicio")
@@ -21,7 +21,7 @@ class Evento:
         self.free_dragons = list(free_dragons) if free_dragons else []
         self.weapons = list(weapons) if weapons else []
         self.armors = list(armors) if armors else []
-        self.extra=extra
+        self.extra = extra if extra else 0
         self.warriors = self.franquicia_warriors + self.randoms_warriors
         self.dragons = self.franquicia_dragons + self.free_dragons
         

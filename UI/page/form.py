@@ -289,7 +289,22 @@ def pagina_formulario():
             st.rerun()
 
         if submitted:
-            #Regla 0: Verificar nombre del evento
+            #verificar que sea un evento futuro, no en una fecha q ya paso y q la fecha de inicio sea menor q la de fin
+            actual_date=datetime.now().date()
+            actual_time=datetime.now().time()
+            fecha_actual = datetime.combine(actual_date, actual_time)
+            fecha_escogida_inicial = (datetime.combine(start_date, start_time))
+            fecha_escogida_final = (datetime.combine(finish_date, finish_time))
+            if fecha_escogida_inicial < fecha_actual:
+                st.error("La fecha escogida ya pasó")
+                st.stop()
+
+            if fecha_escogida_inicial  > fecha_escogida_final:
+                st.error("La fecha inicial no puede ser mayor que la final")
+                st.stop()
+
+
+            #Verificar nombre del evento
             if not title.strip():
                 st.error("El evento debe tener un nombre")
                 st.stop()
@@ -308,7 +323,10 @@ def pagina_formulario():
             disponibilidad_arena, msg= gestor.verificar_disponibilidad_arena(arena, start_date, start_time, finish_date, finish_time)
             if not disponibilidad_arena:
                 st.error(msg)
+                st.info(gestor.recomendar_fecha(arena, start_date, start_time, finish_date, finish_time))
                 st.stop()
+
+
             #Regla 2: Verificar participacion diaria
             participacion_diaria, msg = verificar_participacion_diaria(gestor, warriors, dragons, str(start_date)) 
             if not participacion_diaria: 
@@ -320,7 +338,7 @@ def pagina_formulario():
                 st.error(msg) 
                 st.stop()
             #Regla 4: Veificacion del Cremallerus
-            cremallerus_ok, msg = verificacion_del_cremallerus(gestor, dragons, warriors, type_of_event) 
+            cremallerus_ok, msg = verificacion_del_cremallerus(gestor, type_of_event, dragons, free_dragons_selected, warriors, randoms_selected) 
             if not cremallerus_ok: 
                 st.error(msg) 
                 st.stop()
@@ -351,22 +369,24 @@ def pagina_formulario():
             colisiones_ok, msg = colision_personajes(gestor, warriors)
             if not colisiones_ok:
                 st.error(msg)
-                st.stop
+                st.stop()
 
             else: 
                 new_evento = Evento( 
-                    title, 
-                    start_date,
-                    start_time, 
-                    finish_date, 
-                    finish_time, 
-                    type_of_event, 
-                    arena,
-                    warriors + sum([[w]*c for w,c in randoms_selected.items()], []), 
-                    dragons + sum([[d]*c for d,c in free_dragons_selected.items()], []), 
-                    [w for w,c in weapons_selected.items() for _ in range(c)], 
-                    [a for a,c in armors_selected.items() for _ in range(c)], 
-                    ovejas_selected 
+                    title=title, 
+                    start_date=start_date,
+                    start_time=start_time, 
+                    finish_date=finish_date, 
+                    finish_time=finish_time, 
+                    type_of_event=type_of_event, 
+                    arena=arena,
+                    franquicia_warriors=warriors,
+                    randoms_warriors=sum([[w]*c for w,c in randoms_selected.items()], []), 
+                    franquicia_dragons=dragons,
+                    free_dragons=sum([[d]*c for d,c in free_dragons_selected.items()], []), 
+                    weapons=[w for w,c in weapons_selected.items() for _ in range(c)], 
+                    armors=[a for a,c in armors_selected.items() for _ in range(c)], 
+                    extra=ovejas_selected 
                     ) 
                 gestor.eventos.append(new_evento) 
                 # Restar recursos del almacén 
@@ -386,6 +406,7 @@ def pagina_formulario():
                 gestor.daily_participation[fecha_str]["guerreros"].update(new_evento.warriors) 
                 gestor.daily_participation[fecha_str]["dragones"].update(new_evento.dragons)
 
+                gestor.guardar_en_json()
                 st.success(f"Evento '{title}' creado exitosamente 🎉")
 
     st.markdown("""

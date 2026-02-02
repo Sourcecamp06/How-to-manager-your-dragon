@@ -48,18 +48,31 @@ def verificar_dragones_con_su_guerrero(gestor, guerreros, dragones, tipo_evento)
     return True, ""
 
 #Regla 4
-def verificacion_del_cremallerus(gestor, dragones, guerreros, tipo_evento):
+def verificacion_del_cremallerus(gestor, tipo_evento, dragons, free_dragons, warriors, randoms_warriors):
     if tipo_evento in ["Pelea entre vikingos montados en dragones", "Competencia de encestar la oveja", "Entrenamiento de vuelo"]:
-        count=0
-        for dragon in dragones:
-            if dragon == "Cremallerus Espantosus":
-                count+=2
+        total_dragons=0
+        for dragon in dragons:
+            if dragon == "Eructo y Guácara":
+                total_dragons+=2
             else:
                 count+=1
-        if count<len(guerreros):
-            return False, "No hay suficientes dragones"
-        elif count>len(guerreros):
+        for dragon in free_dragons.keys():
+            if dragon == "Cremallerus Espantosus":
+                total_dragons += free_dragons[dragon]*2
+            else:
+                total_dragons += free_dragons[dragon]
+        total_warriors=0
+        for warrior in warriors:
+            total_warriors+=1
+        for warrior in randoms_warriors.keys():
+            total_warriors+=randoms_warriors[warrior]
+
+        if total_warriors < total_dragons:
             return False, "No hay suficientes guerreros"
+        
+        if total_warriors > total_dragons:
+            return False, "No hay suficientes dragones"
+        
     return True, ""
 
 #Regla 5
@@ -70,6 +83,9 @@ def verificacion_evento_ovejas(gestor, tipo_evento:str, arena:str, extra:int):
         if extra<=0:
             return False, f"El evento no se puede realizar sin ovejas"
         return True, ""
+    if tipo_evento!="Competencia de encestar la oveja" and extra>0:
+        return False, f"el evento {tipo_evento} no puede utilizar ovejas"
+
     return True, ""
     
 #Regla 6

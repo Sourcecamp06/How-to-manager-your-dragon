@@ -89,10 +89,12 @@ def pagina_eventos_activos():
                         gestor.armors[armadura] += count
                     if hasattr(evento_eliminado, "extra") and evento_eliminado.extra is not None:
                         gestor.ovejas += evento_eliminado.extra
-                        st.success(f"✅ Evento '{evento_eliminado.title}' eliminado y recursos devueltos")
-                        st.rerun()
-                    else:
-                        st.info("No hay eventos activos en este momento.")
+
+                    gestor.guardar_en_json() 
+                    st.success(f"✅ Evento '{evento_eliminado.title}' eliminado y recursos devueltos")
+                    st.rerun()
+    else:
+        st.info("No hay eventos activos en este momento")
 
     # Botones navegación
     col1, spacer, col2 = st.columns(3)
