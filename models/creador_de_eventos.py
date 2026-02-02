@@ -2,6 +2,12 @@ from datetime import date, time, datetime
 import json
 class Evento:
     def __init__(self, title:str, start_date:date, start_time:time, finish_date:date, finish_time:time, type_of_event:str, arena:str, franquicia_warriors=None, randoms_warriors=None, franquicia_dragons=None, free_dragons=None, weapons=None, armors=None, extra=None):
+        
+        if finish_date < start_date:
+            raise ValueError("La fecha de fin no puede ser anterior a la de inicio")
+        if finish_date == start_date and finish_time <= start_time:
+            raise ValueError("La hora de fin debe ser posterior a la de inicio")
+
         self.title=title
         self.start_date=start_date
         self.start_time=start_time

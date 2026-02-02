@@ -3,10 +3,18 @@ import base64
 from UI.page.form import pagina_formulario
 from UI.page.events import pagina_eventos_activos
 
+st.set_page_config(
+    page_title="How to Manager Your Dragon",
+    page_icon="assets/icon.png",
+    layout="centered",
+)
+
+
 def get_base64_of_bin_file(bin_file):
-    with open(bin_file, 'rb') as f:
+    with open(bin_file, "rb") as f:
         data = f.read()
     return base64.b64encode(data).decode()
+
 
 # Ruta a tu imagen local
 img_path = "assets/main.png"
@@ -15,7 +23,8 @@ img_base64 = get_base64_of_bin_file(img_path)
 if "page" not in st.session_state:
     st.session_state.page = "home"
 
-st.markdown(f"""
+st.markdown(
+    f"""
 <style>    
     [data-testid="stAppViewContainer"] {{
         background-image: url("data:image/png;base64,{img_base64}");
@@ -103,15 +112,21 @@ st.markdown(f"""
         text-decoration: none !important;
     }}
 </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
+
 
 def main_menu():
     # Contenedor principal
-    st.markdown("""
+    st.markdown(
+        """
     <div class="main-container">
         <div class="title">How to manager your dragon</div>
         <div class="buttons-container">
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
     # Crear un contenedor flex dentro del grid
     col1, spacer, col2 = st.columns([1, 1, 1])
@@ -128,10 +143,13 @@ def main_menu():
             st.session_state.page = "eventos_activos"
             st.rerun()
 
-    st.markdown("""
+    st.markdown(
+        """
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
 
 # --- Router de páginas ---

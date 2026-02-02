@@ -46,6 +46,10 @@ def pagina_eventos_activos():
         border-radius: 10px;
         margin-bottom: 12px;
         box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        color: black !important;
+    }}
+    div[data-testid="stExpander"] p, div[data-testid="stExpander"] span, div[data-testid="stExpander"] div {{
+        color: black !important;
     }}
     div[data-testid="stExpander"]:hover {{
         border-color: rgba(202,48,1,0.4);

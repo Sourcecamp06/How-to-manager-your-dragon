@@ -7,13 +7,13 @@ from models.gestor_de_recursos import GestorEventos
 from models.validador_de_fechas import *
 from models.validador_de_reglas import *
 
-# Inicializar gestor (puedes usar st.session_state para persistencia)
-if "gestor" not in st.session_state:
-    st.session_state.gestor = GestorEventos()
-
-gestor = st.session_state.gestor
-
 def pagina_formulario():
+        # Inicializar gestor (puedes usar st.session_state para persistencia)
+    if "gestor" not in st.session_state:
+        st.session_state.gestor = GestorEventos()
+
+    gestor = st.session_state.gestor
+    
     st.markdown("""<h2 class="header">Crea tu nuevo evento</h2>""", unsafe_allow_html=True)
 
     st.markdown(f"""
@@ -289,8 +289,23 @@ def pagina_formulario():
             st.rerun()
 
         if submitted:
+            #Regla 0: Verificar nombre del evento
+            if not title.strip():
+                st.error("El evento debe tener un nombre")
+                st.stop()
+
+            for evento_existente in gestor.eventos:
+                if evento_existente.title == title:
+                    st.error(f"Ya existe un evento con el nombre '{title}'")
+                    st.stop()
+            
+            #duracion del evento
+            if gestor.duration(start_date, start_time, finish_date, finish_time) == 0:
+                st.error("El evento no puede durar 0 minutos")
+                st.stop()
+
             #Regla 1: Verificar disponibilidad de arena
-            disponibilidad_arena, msg= verificar_disponibilidad_arena(gestor, arena, start_date, start_time, finish_date, finish_time)
+            disponibilidad_arena, msg= gestor.verificar_disponibilidad_arena(arena, start_date, start_time, finish_date, finish_time)
             if not disponibilidad_arena:
                 st.error(msg)
                 st.stop()

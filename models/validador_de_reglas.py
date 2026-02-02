@@ -68,7 +68,7 @@ def verificacion_evento_ovejas(gestor, tipo_evento:str, arena:str, extra:int):
         if arena!="Playa":
             return False, f"El evento no se puede realizar en {arena}, debe realizarse en la playa"
         if extra<=0:
-            return False, f"El evento no se puede realizar con {extra} ovejas"
+            return False, f"El evento no se puede realizar sin ovejas"
         return True, ""
     return True, ""
     
@@ -84,7 +84,8 @@ def verificacion_evento_excursion(gestor, tipo_evento:str, arena:str):
 #Regla 7
 def verificacion_dragones_obligatorios(gestor, tipo_evento:str, free_dragons, franquicia_dragons):
     if tipo_evento in ["Pelea entre vikingos montados en dragones", "Pelea de vikingos contra dragones", "Competencia de encestar la oveja", "Entrenamiento de vuelo"]:
-        if len(free_dragons)==0 and len(franquicia_dragons)==0:
+        cantidad_dragones_libres = sum(free_dragons.values())
+        if cantidad_dragones_libres==0 and len(franquicia_dragons)==0:
             return False, f"Para el evento {tipo_evento} debe haber dragones"
         else:
             return True, ""
@@ -93,7 +94,8 @@ def verificacion_dragones_obligatorios(gestor, tipo_evento:str, free_dragons, fr
 #Regla 8
 def verificacion_no_dragones(gestor, tipo_evento:str, free_dragons, franquicia_dragons):
     if tipo_evento == "Pelea entre vikingos":
-        if len(free_dragons)>0 or len(franquicia_dragons)>0:
+        cantidad_dragones_libres = sum(free_dragons.values())
+        if cantidad_dragones_libres>0 or len(franquicia_dragons)>0:
             return False, f"En el evento {tipo_evento} no puede haber dragones"
         else: 
             return True, ""
