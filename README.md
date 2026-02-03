@@ -104,6 +104,7 @@ dragones, Competencia de encestar la oveja y Entrenamiento de vuelo es obligator
 
 ## 🏗️ Estructura del Proyecto
 
+<pre>
 How-to-manager-your-dragon/
 │
 ├── main.py
@@ -130,6 +131,7 @@ How-to-manager-your-dragon/
         ├── events.py
         ├── form.py
         └── __init__.py
+</pre>
 
 ## 🛠️ Instalación
 
