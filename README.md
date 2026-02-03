@@ -77,12 +77,12 @@
 1. No puede ocurrir más de un evento simultáneamente en una arena
 2. Un guerrero de la franquicia y su dragón solo pueden participar en un evento al día
 3. Para peleas montados en dragones, competencia de encestar la oveja y entrenamiento de vuelo, cada guerrero de la franquicia tiene asignado su dragón por defecto[(Chimuelo - Hippo), (Tormenta - Astrid), (Albondiga - Patapez), (Gruñón - Bocón), (Eructo y Guácara - Brutacio), (Eructo y Guácara - Brutilda)(Los hermanos deben ir juntos a la batalla), (Colmillo - Patán), (Rompecráneos - Estoico(papá de Hippo)), (Brincanubes - Valka(mamá de Hippo))], además cada dragón con propietario no puede ser utilizado por otro guerrero
-4. Si vas a montar un Cremallerus Espantosus debe tener dos jinetes que lo monten
+4. Los eventos: Pelea entre vikingos montados en dragones, Competencia de encestar la oveja, Entrenamiento de vuelo tienen que tener la misma cantidad de dragones q de vikingos, y si vas a montar un Cremallerus Espantosus debe tener dos jinetes que lo monten
 5. La competencia de encestar la oveja solo se puede realizar en la playa y las ovejas son exclusivamente para este evento
 6. Las excursiones para domar dragones solo pueden realizarse en la guarida de dragones
 7. Para los eventos de Peleas entre vikingos montados en dragones, Peleas de vikingos contra
 dragones, Competencia de encestar la oveja y Entrenamiento de vuelo es obligatorio escoger al menos un dragón
-8. Para las competencias entre vikingos no se puede escoger dragones
+8. Para la competencia Pelea entre vikingos no se puede escoger dragones
 9. Hippo no se lleva muy bien con Patán y Bocón no se lleva muy bien con Estoico, así q no pueden estar juntos en ningun tipo de evento
 
 ## 🚀 Características del Programa
@@ -103,20 +103,33 @@ dragones, Competencia de encestar la oveja y Entrenamiento de vuelo es obligator
 - Visualización de eventos programados
 
 ## 🏗️ Estructura del Proyecto
-<!-- ├──assets/
-├──models/
-│ ├── creador_de_eventos.py # Clase Evento
-│ ├── gestor_de_recursos.py # Clase GestorEventos
-│ ├── validador_de_fechas.py # Validaciones de tiempo
-│ └── validador_de_reglas.py # Reglas de negocio
-├── form.py # Interfaz Streamlit
-├── requirements.txt
-├── README.md
-└── 
-└── main.png -->
 
-### Ejemplo de uso
-    pass
+How-to-manager-your-dragon/
+│
+├── main.py
+├── README.md
+├── requirements.txt
+│
+├── assets/
+│   ├── icon.png
+│   └── main.png
+│
+├── data/
+│   ├── eventos.json
+│   └── __init__.py
+│
+├── models/
+│   ├── creador_de_eventos.py
+│   ├── gestor_de_recursos.py
+│   ├── validador_de_reglas.py
+│   └── __init__.py
+│
+└── UI/
+    ├── __init__.py
+    └── page/
+        ├── events.py
+        ├── form.py
+        └── __init__.py
 
 ## 🛠️ Instalación
 

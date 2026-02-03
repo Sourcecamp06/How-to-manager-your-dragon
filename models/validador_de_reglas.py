@@ -107,8 +107,9 @@ def verificacion_dragones_obligatorios(gestor, tipo_evento:str, free_dragons, fr
             return True, ""
     return True, ""
 
-#Regla 8
+#Regla 8  
 def verificacion_no_dragones(gestor, tipo_evento:str, free_dragons, franquicia_dragons):
+    
     if tipo_evento == "Pelea entre vikingos":
         cantidad_dragones_libres = sum(free_dragons.values())
         if cantidad_dragones_libres>0 or len(franquicia_dragons)>0:
