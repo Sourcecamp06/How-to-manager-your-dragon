@@ -7,6 +7,24 @@ from models.gestor_de_recursos import GestorEventos
 from models.validador_de_fechas import *
 from models.validador_de_reglas import *
 
+def evento_a_dict(evento):
+    return {
+        "title": evento.title,
+        "start_date": str(evento.start_date),
+        "start_time": str(evento.start_time),
+        "finish_date": str(evento.finish_date),
+        "finish_time": str(evento.finish_time),
+        "type_of_event": evento.type_of_event,
+        "arena": evento.arena,
+        "franquicia_warriors": evento.franquicia_warriors,
+        "randoms_warriors": evento.randoms_warriors,
+        "franquicia_dragons": evento.franquicia_dragons,
+        "free_dragons": evento.free_dragons,
+        "weapons": evento.weapons,
+        "armors": evento.armors,
+        "extra": evento.extra
+    }
+
 def pagina_formulario():
         # Inicializar gestor (puedes usar st.session_state para persistencia)
     if "gestor" not in st.session_state:
@@ -214,7 +232,6 @@ def pagina_formulario():
     """, unsafe_allow_html=True)
 
 
-
     # --- Formulario para crear evento ---
     with st.form("crear_evento"):
         title = st.text_input("Título del evento")
@@ -389,6 +406,11 @@ def pagina_formulario():
                     extra=ovejas_selected 
                     ) 
                 gestor.eventos.append(new_evento) 
+
+                # Guardar todos los eventos en JSON
+                with open("data/eventos.json", "w", encoding="utf-8") as f: 
+                    json.dump([evento_a_dict(ev) for ev in gestor.eventos], f, ensure_ascii=False, indent=4)
+
                 # Restar recursos del almacén 
                 for grupo, cantidad in randoms_selected.items(): 
                     gestor.randoms_warriors[grupo] -= cantidad 

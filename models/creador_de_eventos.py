@@ -25,25 +25,6 @@ class Evento:
         self.warriors = self.franquicia_warriors + self.randoms_warriors
         self.dragons = self.franquicia_dragons + self.free_dragons
         
-    def to_dict(self):
-        return{
-            'title': self.title,
-            'start_date': self.start_date.strftime("%Y-%m-%d") if self.start_date else None, 
-            'start_time': self.start_time.strftime("%H:%M") if self.start_time else None,    
-            'finish_date': self.finish_date.strftime("%Y-%m-%d") if self.finish_date else None,
-            'finish_time': self.finish_time.strftime("%H:%M") if self.finish_time else None,
-            'type_of_event': self.type_of_event,
-            'arena': self.arena,
-            'franquicia_warriors': self.franquicia_warriors,
-            'randoms_warriors': self.randoms_warriors,
-            'franquicia_dragons': self.franquicia_dragons,
-            'free_dragons': self.free_dragons,
-            'dragons': self.dragons,
-            'warriors': self.warriors,
-            'weapons': self.weapons,
-            'armors': self.armors,
-            'extra': self.extra,
-        }
     
     @classmethod
     def from_dict(cls, data):

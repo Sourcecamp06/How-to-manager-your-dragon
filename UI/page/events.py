@@ -1,6 +1,8 @@
 import streamlit as st
 import base64
+import json
 from models.gestor_de_recursos import GestorEventos
+from models.creador_de_eventos import Evento
 
 def pagina_eventos_activos():
     # Inicializar gestor
@@ -60,9 +62,21 @@ def pagina_eventos_activos():
     # Header
     st.markdown("<h2 class='header'>Eventos activos</h2>", unsafe_allow_html=True)
 
+    def cargar_eventos(): 
+        try: 
+            with open("data/eventos.json", "r", encoding="utf-8") as f: 
+                data = json.load(f) 
+                return [Evento(**evento) for evento in data] 
+        except FileNotFoundError: 
+            return []
+
+
     # Lista de eventos
     if eventos:
-        for idx, ev in enumerate(eventos):
+
+        eventos_guardados = cargar_eventos()
+
+        for idx, ev in enumerate(eventos_guardados):
             with st.expander(f"🗡️ {ev.title} — {ev.type_of_event} ({ev.arena})"):
                 st.markdown(f"**📅 Inicio:** {ev.start_date} {ev.start_time}")
                 st.markdown(f"**📅 Fin:** {ev.finish_date} {ev.finish_time}")
