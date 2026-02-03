@@ -4,26 +4,7 @@ import datetime
 from datetime import time
 from models.creador_de_eventos import Evento
 from models.gestor_de_recursos import GestorEventos
-from models.validador_de_fechas import *
 from models.validador_de_reglas import *
-
-def evento_a_dict(evento):
-    return {
-        "title": evento.title,
-        "start_date": str(evento.start_date),
-        "start_time": str(evento.start_time),
-        "finish_date": str(evento.finish_date),
-        "finish_time": str(evento.finish_time),
-        "type_of_event": evento.type_of_event,
-        "arena": evento.arena,
-        "franquicia_warriors": evento.franquicia_warriors,
-        "randoms_warriors": evento.randoms_warriors,
-        "franquicia_dragons": evento.franquicia_dragons,
-        "free_dragons": evento.free_dragons,
-        "weapons": evento.weapons,
-        "armors": evento.armors,
-        "extra": evento.extra
-    }
 
 def pagina_formulario():
         # Inicializar gestor (puedes usar st.session_state para persistencia)
@@ -407,10 +388,6 @@ def pagina_formulario():
                     ) 
                 gestor.eventos.append(new_evento) 
 
-                # Guardar todos los eventos en JSON
-                with open("data/eventos.json", "w", encoding="utf-8") as f: 
-                    json.dump([evento_a_dict(ev) for ev in gestor.eventos], f, ensure_ascii=False, indent=4)
-
                 # Restar recursos del almacén 
                 for grupo, cantidad in randoms_selected.items(): 
                     gestor.randoms_warriors[grupo] -= cantidad 
@@ -422,11 +399,11 @@ def pagina_formulario():
                     gestor.armors[armadura] -= cantidad 
                 gestor.ovejas -= ovejas_selected 
 
-                fecha_str = str(start_date) 
-                if fecha_str not in gestor.daily_participation: 
-                    gestor.daily_participation[fecha_str] = {"guerreros": set(), "dragones": set()} 
-                gestor.daily_participation[fecha_str]["guerreros"].update(new_evento.warriors) 
-                gestor.daily_participation[fecha_str]["dragones"].update(new_evento.dragons)
+                if start_date not in gestor.daily_participation: 
+                    gestor.daily_participation[start_date] = {"guerreros": set(), "dragones": set()} 
+                gestor.daily_participation[start_date]["guerreros"].update(new_evento.warriors) 
+                gestor.daily_participation[start_date]["dragones"].update(new_evento.dragons)
+
 
                 gestor.guardar_en_json()
                 st.success(f"Evento '{title}' creado exitosamente 🎉")

@@ -69,6 +69,10 @@ class GestorEventos:
         #Registro de participacion diaria
         self.daily_participation = {}
 
+        self.archivo_json = "data/eventos.json"
+        if not os.path.exists("data"):
+            os.makedirs("data")
+
         self.cargar_desde_json()
 
     def verificar_recursos_disponibles(self, recursos_solicitados):
@@ -132,7 +136,7 @@ class GestorEventos:
                     "ovejas": self.ovejas
                 },
                 "daily_participation": {
-                    fecha: {
+                    str(fecha): {
                         "guerreros": list(datos["guerreros"]),
                         "dragones": list(datos["dragones"])
                     }
@@ -161,25 +165,8 @@ class GestorEventos:
             # Restaurar eventos
             self.eventos = []
             for evento_data in datos.get("eventos", []):
-                # Convertir strings a objetos date/time
-                evento = Evento(
-                    title=evento_data['title'],
-                    start_date=date.fromisoformat(evento_data['start_date']),
-                    start_time=time.fromisoformat(evento_data['start_time']),
-                    finish_date=date.fromisoformat(evento_data['finish_date']),
-                    finish_time=time.fromisoformat(evento_data['finish_time']),
-                    type_of_event=evento_data['type_of_event'],
-                    arena=evento_data['arena'],
-                    franquicia_warriors=evento_data.get('franquicia_warriors', []),
-                    randoms_warriors=evento_data.get('randoms_warriors', []),
-                    franquicia_dragons=evento_data.get('franquicia_dragons', []),
-                    free_dragons=evento_data.get('free_dragons', []),
-                    weapons=evento_data.get('weapons', []),
-                    armors=evento_data.get('armors', []),
-                    extra=evento_data.get('extra', 0)
-                )
-                self.eventos.append(evento)
-            
+                self.eventos.append(Evento.from_dict(evento_data))
+
             # Restaurar recursos
             recursos = datos.get("recursos_actuales", {})
             self.randoms_warriors = recursos.get("randoms_warriors", self.randoms_warriors)
@@ -190,14 +177,14 @@ class GestorEventos:
             
             # Restaurar participación diaria
             daily_data = datos.get("daily_participation", {})
-            self.daily_participation = {
-                fecha: {
-                    "guerreros": set(datos["guerreros"]),
-                    "dragones": set(datos["dragones"])
+            self.daily_participation = {}
+            for fecha_str, datos_dia in daily_data.items():
+                fecha = date.fromisoformat(fecha_str)
+                self.daily_participation[fecha] = {
+                    "guerreros": set(datos_dia["guerreros"]),
+                    "dragones": set(datos_dia["dragones"]),
                 }
-                for fecha, datos in daily_data.items()
-            }
-            
+
             return True, f"Datos cargados desde {self.archivo_json}"
         except Exception as e:
             return False, f"Error al cargar: {e}"

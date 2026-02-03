@@ -73,10 +73,7 @@ def pagina_eventos_activos():
 
     # Lista de eventos
     if eventos:
-
-        eventos_guardados = cargar_eventos()
-
-        for idx, ev in enumerate(eventos_guardados):
+        for idx, ev in enumerate(eventos):
             with st.expander(f"🗡️ {ev.title} — {ev.type_of_event} ({ev.arena})"):
                 st.markdown(f"**📅 Inicio:** {ev.start_date} {ev.start_time}")
                 st.markdown(f"**📅 Fin:** {ev.finish_date} {ev.finish_time}")

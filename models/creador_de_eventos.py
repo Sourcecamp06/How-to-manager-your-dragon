@@ -25,6 +25,24 @@ class Evento:
         self.warriors = self.franquicia_warriors + self.randoms_warriors
         self.dragons = self.franquicia_dragons + self.free_dragons
         
+    def to_dict(self):
+        return {
+            "title": self.title,
+            "start_date": self.start_date.isoformat(),
+            "start_time": self.start_time.isoformat(),
+            "finish_date": self.finish_date.isoformat(),
+            "finish_time": self.finish_time.isoformat(),
+            "type_of_event": self.type_of_event,
+            "arena": self.arena,
+            "franquicia_warriors": self.franquicia_warriors,
+            "randoms_warriors": self.randoms_warriors,
+            "franquicia_dragons": self.franquicia_dragons,
+            "free_dragons": self.free_dragons,
+            "weapons": self.weapons,
+            "armors": self.armors,
+            "extra": self.extra
+        }
+
     
     @classmethod
     def from_dict(cls, data):
