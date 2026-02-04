@@ -17,7 +17,7 @@ class GestorEventos:
         self.franquicia_warriors = ["Hippo", "Astrid", "Patán", "Patapez", "Brutacio", "Brutilda", "Estoico", "Bocón", "Valka"]
 
         #Guerreros randoms
-        self.randoms_warriors = {"Guerreros de Berk":5, "Guerreras de Berk":5, "Ancianos de Berk":5}
+        self.randoms_warriors = {"Guerrero de Berk":5, "Guerrera de Berk":5, "Anciano de Berk":5}
 
         #Dragones de la franquicia
         self.franquicia_dragons = ["Chimuelo", "Tormenta", "Colmillo", "Albondiga", "Eructo y Guácara", "Rompecráneos", "Gruñón", "Brincanubes"]
@@ -47,20 +47,20 @@ class GestorEventos:
 
         #Armas
         self.weapons = {
-            "Escudos": 8,
-            "Mazos": 8, 
-            "Espadas": 8,
-            "Ballestas": 3,
+            "Escudo": 8,
+            "Mazo": 8, 
+            "Espada": 8,
+            "Ballesta": 3,
             "Catapulta": 1
         }
 
         #Armaduras
         self.armors = {
-            "Cascos vikingos": 10,
-            "Pecheras de cuero": 10,
-            "Pantalones de cuero": 10, 
-            "Botas de hierro": 10,
-            "Cinturones de cuero":10
+            "Casco vikingo": 10,
+            "Pechera de cuero": 10,
+            "Pantalone de cuero": 10, 
+            "Bota de hierro": 10,
+            "Cinturone de cuero":10
         }
 
         #ovejas

@@ -14,23 +14,35 @@ def obtener_clave_por_valor(diccionario, valor_buscado):
 
 #Regla 2
 def verificar_participacion_diaria(gestor, guerreros, dragones, fecha):
+    """
+    Verifica si los guerreros/dragones de la franquicia ya participaron en un evento en la fecha dada.
+    Si no han participado, los registra en la participación diaria.
+    """
     if fecha not in gestor.daily_participation:
         gestor.daily_participation[fecha] = {"guerreros": set(), "dragones": set()}
 
     # Verificar guerreros
     for guerrero in guerreros:
-        if guerrero in gestor.franquicia_warriors and guerrero in gestor.daily_participation[fecha]["guerreros"]:
-            return False, f"El guerrero {guerrero} ya participa en un evento hoy"
-        
+        if guerrero in gestor.franquicia_warriors:
+            if guerrero in gestor.daily_participation[fecha]["guerreros"]:
+                return False, f"El guerrero {guerrero} ya participa en un evento hoy"
+            # Registrar participación
+            gestor.daily_participation[fecha]["guerreros"].add(guerrero)
+
     # Verificar dragones
     for dragon in dragones:
-        if dragon in gestor.franquicia_dragons and dragon in gestor.daily_participation[fecha]["dragones"]:
-            return False, f"El dragón {dragon} ya participa en un evento hoy"
-        
+        if dragon in gestor.franquicia_dragons:
+            if dragon in gestor.daily_participation[fecha]["dragones"]:
+                return False, f"El dragón {dragon} ya participa en un evento hoy"
+            # Registrar participación
+            gestor.daily_participation[fecha]["dragones"].add(dragon)
+
     return True, ""
+
 
 #Regla 3
 def verificar_dragones_con_su_guerrero(gestor, guerreros, dragones, tipo_evento):
+    """Verifica que cada dragon vaya con su guerrero de la franquicia"""
     if tipo_evento in ["Pelea entre vikingos montados en dragones", "Competencia de encestar la oveja", "Entrenamiento de vuelo"]:
         # Verificar hermanos Brutacio y Brutilda
         brutacio_presente = "Brutacio" in guerreros
@@ -49,13 +61,14 @@ def verificar_dragones_con_su_guerrero(gestor, guerreros, dragones, tipo_evento)
 
 #Regla 4
 def verificacion_del_cremallerus(gestor, tipo_evento, dragons, free_dragons, warriors, randoms_warriors):
+    """Verifica que en algunos eventos especificos haya la misma cantidad de dragones que de guerreros, teniendo en cuenta que el cremallerus solicita de dos guerreros para montarlo"""
     if tipo_evento in ["Pelea entre vikingos montados en dragones", "Competencia de encestar la oveja", "Entrenamiento de vuelo"]:
         total_dragons=0
         for dragon in dragons:
             if dragon == "Eructo y Guácara":
                 total_dragons+=2
             else:
-                count+=1
+                total_dragons+=1
         for dragon in free_dragons.keys():
             if dragon == "Cremallerus Espantosus":
                 total_dragons += free_dragons[dragon]*2
@@ -77,6 +90,7 @@ def verificacion_del_cremallerus(gestor, tipo_evento, dragons, free_dragons, war
 
 #Regla 5
 def verificacion_evento_ovejas(gestor, tipo_evento:str, arena:str, extra:int):
+    """Verifica que el evento de encestar las ovejas se haga en la playa y que exclusivamente se utilicen las ovejas para este evento"""
     if tipo_evento=="Competencia de encestar la oveja":
         if arena!="Playa":
             return False, f"El evento no se puede realizar en {arena}, debe realizarse en la playa"
@@ -90,6 +104,7 @@ def verificacion_evento_ovejas(gestor, tipo_evento:str, arena:str, extra:int):
     
 #Regla 6
 def verificacion_evento_excursion(gestor, tipo_evento:str, arena:str):
+    """Verifica que el evento de excursion para domesticar dragones se haga en la guarida de dragones"""
     if tipo_evento=="Excursion para domesticar dragones":
         if arena!="Guarida de dragones":
             return False, f"El evento no se puede realizar en {arena}, debe realizarse en la Guarida de dragones"
@@ -99,6 +114,7 @@ def verificacion_evento_excursion(gestor, tipo_evento:str, arena:str):
 
 #Regla 7
 def verificacion_dragones_obligatorios(gestor, tipo_evento:str, free_dragons, franquicia_dragons):
+    """Verifica que algunos eventos tengan al menos un dragon"""
     if tipo_evento in ["Pelea entre vikingos montados en dragones", "Pelea de vikingos contra dragones", "Competencia de encestar la oveja", "Entrenamiento de vuelo"]:
         cantidad_dragones_libres = sum(free_dragons.values())
         if cantidad_dragones_libres==0 and len(franquicia_dragons)==0:
@@ -109,7 +125,7 @@ def verificacion_dragones_obligatorios(gestor, tipo_evento:str, free_dragons, fr
 
 #Regla 8  
 def verificacion_no_dragones(gestor, tipo_evento:str, free_dragons, franquicia_dragons):
-    
+    """Verifica que el evento pelea entre vikingos no utilice dragones"""
     if tipo_evento == "Pelea entre vikingos":
         cantidad_dragones_libres = sum(free_dragons.values())
         if cantidad_dragones_libres>0 or len(franquicia_dragons)>0:
@@ -120,6 +136,7 @@ def verificacion_no_dragones(gestor, tipo_evento:str, free_dragons, franquicia_d
 
 #Regla 9
 def colision_personajes(gestor, franquicia_warriors):
+    """Verifica que no haya colisiones entre algunos personajes"""
     if "Hippo" in franquicia_warriors and "Patán" in franquicia_warriors:
         return False, "Hippo y Patán no se llevan bien así que no pueden participar juntos en un evento"
     if "Bocón" in franquicia_warriors and "Estoico" in franquicia_warriors:

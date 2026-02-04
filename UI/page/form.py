@@ -293,11 +293,11 @@ def pagina_formulario():
             fecha_actual = datetime.combine(actual_date, actual_time)
             fecha_escogida_inicial = (datetime.combine(start_date, start_time))
             fecha_escogida_final = (datetime.combine(finish_date, finish_time))
-            if fecha_escogida_inicial < fecha_actual:
-                st.error("La fecha escogida ya pasó")
+            if actual_date >= start_date:
+                st.error("Tienes que planificar los eventos con al menos un día de antelación")
                 st.stop()
 
-            if fecha_escogida_inicial  > fecha_escogida_final:
+            if fecha_escogida_inicial > fecha_escogida_final:
                 st.error("La fecha inicial no puede ser mayor que la final")
                 st.stop()
 
@@ -324,22 +324,24 @@ def pagina_formulario():
                 st.info(gestor.recomendar_fecha(arena, start_date, start_time, finish_date, finish_time))
                 st.stop()
 
-
             #Regla 2: Verificar participacion diaria
             participacion_diaria, msg = verificar_participacion_diaria(gestor, warriors, dragons, str(start_date)) 
             if not participacion_diaria: 
                 st.error(msg) 
                 st.stop()
+
             #Regla 3: Verificar dragones con sus guerreros
             dragones_con_sus_guerreros, msg = verificar_dragones_con_su_guerrero(gestor, warriors, dragons, type_of_event) 
             if not dragones_con_sus_guerreros: 
                 st.error(msg) 
                 st.stop()
+
             #Regla 4: Veificacion del Cremallerus
             cremallerus_ok, msg = verificacion_del_cremallerus(gestor, type_of_event, dragons, free_dragons_selected, warriors, randoms_selected) 
             if not cremallerus_ok: 
                 st.error(msg) 
                 st.stop()
+
             #Regla 5: Verificacion del evento de las ovejas
             ovejas_ok, msg = verificacion_evento_ovejas(gestor, type_of_event, arena, ovejas_selected) 
             if not ovejas_ok: 
@@ -364,6 +366,7 @@ def pagina_formulario():
                 st.error(msg)
                 st.stop()
 
+            #Regla 9: colision de personajes
             colisiones_ok, msg = colision_personajes(gestor, warriors)
             if not colisiones_ok:
                 st.error(msg)

@@ -37,14 +37,14 @@
 
 ## 🐉 Dragones 
 
-- Chimuelo:1
-- Tormenta:1
-- Colmillo:1
-- Albondiga:1
-- Eructo y Guácara:1
-- Rompecráneos:1
-- Gruñón:1
-- Brincanubes:1
+- Chimuelo
+- Tormenta
+- Colmillo
+- Albondiga
+- Eructo y Guácara
+- Rompecráneos
+- Gruñón
+- Brincanubes
 
 - Terror Terrible: 5
 - Nadder Mortal: 3
