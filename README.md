@@ -71,7 +71,7 @@
 
 ## 🐏 Extras
 
-- Ovejas: 20
+- Ovejas: 20 (20% de probabilidad de que salgan negras, el otro 80% es blanca)
 
 ## 📋 Reglas a seguir
 1. No puede ocurrir más de un evento simultáneamente en una arena
@@ -144,3 +144,4 @@ How-to-manager-your-dragon/
 git clone https://github.com/Sourcecamp06/How-to-manager-your-dragon.git
 cd how-to-manager-your-dragon
 pip install -r requirements.txt
+streamlit run main.py

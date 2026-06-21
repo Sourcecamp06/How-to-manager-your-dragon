@@ -1,8 +1,9 @@
 from datetime import date, time, datetime
 import json
 class Evento:
+    #Clase para crear el evento
     def __init__(self, title:str, start_date:date, start_time:time, finish_date:date, finish_time:time, type_of_event:str, arena:str, franquicia_warriors=None, randoms_warriors=None, franquicia_dragons=None, free_dragons=None, weapons=None, armors=None, extra=None):
-        
+        #Validacion para posibles errores de fechas
         if finish_date < start_date:
             raise ValueError("La fecha de fin no puede ser anterior a la de inicio")
         if finish_date == start_date and finish_time <= start_time:
@@ -25,6 +26,7 @@ class Evento:
         self.warriors = self.franquicia_warriors + self.randoms_warriors
         self.dragons = self.franquicia_dragons + self.free_dragons
         
+    #convertir el evento en diccionario
     def to_dict(self):
         return {
             "title": self.title,

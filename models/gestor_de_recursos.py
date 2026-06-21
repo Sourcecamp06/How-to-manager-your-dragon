@@ -1,9 +1,10 @@
-from datetime import datetime, date, time
+from datetime import datetime, date, time, timedelta
 import json
 import os
 from .creador_de_eventos import Evento
 
 class GestorEventos:
+    #"Almacen" de recursos disponibles para los eventos
     def __init__(self):
         self.eventos=[]
 
@@ -14,13 +15,22 @@ class GestorEventos:
         self.arenas = ["Arena legendaria de Berk", "Cúspide de los guerreros caídos", "Arena del jefe vikingo", "Playa", "Guarida de dragones"]
 
         #Guerreros de la franquicia
-        self.franquicia_warriors = ["Hippo", "Astrid", "Patán", "Patapez", "Brutacio", "Brutilda", "Estoico", "Bocón", "Valka"]
+        self.franquicia_warriors = {"Hippo":"assets/warriors/hippo.png", "Astrid": "assets/warriors/astrid.png", "Patán": "assets/warriors/patan.png", "Patapez": "assets/warriors/patapez.png", "Brutacio": "assets/warriors/brutacio.png", "Brutilda": "assets/warriors/brutilda.png", "Estoico": "assets/warriors/estoico.png", "Bocón": "assets/warriors/bocon.png", "Valka": "assets/warriors/valka.png"}
 
         #Guerreros randoms
         self.randoms_warriors = {"Guerrero de Berk":5, "Guerrera de Berk":5, "Anciano de Berk":5}
 
         #Dragones de la franquicia
-        self.franquicia_dragons = ["Chimuelo", "Tormenta", "Colmillo", "Albondiga", "Eructo y Guácara", "Rompecráneos", "Gruñón", "Brincanubes"]
+        self.franquicia_dragons = {
+            "Chimuelo": "assets/dragons/chimuelo.png", 
+            "Tormenta": "assets/dragons/tormenta.png", 
+            "Colmillo": "assets/dragons/colmillo.png", 
+            "Albondiga": "assets/dragons/albondiga.png", 
+            "Eructo y Guácara": "assets/dragons/eructoyguacara.png", 
+            "Gruñón": "assets/dragons/grunnon.png", 
+            "Brincanubes": "assets/dragons/brincanubes.png",
+            "Rompecráneos": "assets/dragons/rompecraneos.png"
+        }
 
         #Dragones libres
         self.free_dragons = {
@@ -53,14 +63,32 @@ class GestorEventos:
             "Ballesta": 3,
             "Catapulta": 1
         }
+        
+        # Imagenes de armas
+        self.weapons_images = {
+            "Escudo": "assets/weapons/escudo.png",
+            "Mazo": "assets/weapons/mazo.png",
+            "Espada": "assets/weapons/espada0.png",
+            "Ballesta": "assets/weapons/ballesta.png",
+            "Catapulta": "assets/weapons/catapulta.png"
+        }
 
         #Armaduras
         self.armors = {
             "Casco vikingo": 10,
             "Pechera de cuero": 10,
-            "Pantalone de cuero": 10, 
+            "Pantalon de cuero": 10, 
             "Bota de hierro": 10,
-            "Cinturone de cuero":10
+            "Cinturon de cuero":10
+        }
+        
+        #Imagenes de armaduras
+        self.armors_images = {
+            "Casco vikingo": "assets/armors/casco.png",
+            "Pechera de cuero": "assets/armors/pecheradecuero.png",
+            "Pantalon de cuero": "assets/armors/pantalonedecuero.png",
+            "Bota de hierro": "assets/armors/bota.png",
+            "Cinturon de cuero": "assets/armors/cinturone.png"
         }
 
         #ovejas
@@ -125,7 +153,7 @@ class GestorEventos:
     def guardar_en_json(self):
         """Guarda todos los eventos y recursos actuales en JSON"""
         try:
-            # Preparar datos para guardar
+            #Preparar datos para guardar
             datos = {
                 "eventos": [evento.to_dict() for evento in self.eventos],
                 "recursos_actuales": {
@@ -145,7 +173,7 @@ class GestorEventos:
                 "fecha_ultima_actualizacion": datetime.now().isoformat()
             }
             
-            # Guardar en archivo
+            #Guardar en archivo
             with open(self.archivo_json, 'w', encoding='utf-8') as f:
                 json.dump(datos, f, indent=2, ensure_ascii=False)
             
@@ -184,17 +212,19 @@ class GestorEventos:
                     "guerreros": set(datos_dia["guerreros"]),
                     "dragones": set(datos_dia["dragones"]),
                 }
+            self.compilar_participacion_diaria()
+            self.guardar_en_json()
 
             return True, f"Datos cargados desde {self.archivo_json}"
         except Exception as e:
             return False, f"Error al cargar: {e}"
     
     def auto_guardar(self):
-        """Guarda automáticamente después de cambios importantes"""
+        """Guarda automaticamente despues de cambios importantes"""
         return self.guardar_en_json()
     
     def obtener_estado_json(self):
-        """Muestra cómo se ven los datos en JSON (para debugging)"""
+        """Muestra como se ven los datos en JSON"""
         if self.eventos:
             return json.dumps(self.eventos[0].to_dict(), indent=2, ensure_ascii=False)
         return "No hay eventos para mostrar"
@@ -203,4 +233,20 @@ class GestorEventos:
     def fecha_actual(self):
         return datetime.now().date()
 
-
+    def compilar_participacion_diaria(self):
+        """Reconstruye el registro de participación con los eventos actuales"""
+        self.daily_participation = {}
+        for evento in self.eventos:
+            start = evento.start_date
+            end = evento.finish_date
+            delta = end - start
+            
+            for i in range(delta.days + 1):
+                dia = start + timedelta(days=i)
+                
+                if dia not in self.daily_participation:
+                    self.daily_participation[dia] = {"guerreros": set(), "dragones": set()}
+                
+                self.daily_participation[dia]["guerreros"].update(evento.franquicia_warriors)
+                self.daily_participation[dia]["dragones"].update(evento.franquicia_dragons)
+                

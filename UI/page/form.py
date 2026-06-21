@@ -1,5 +1,6 @@
 import streamlit as st
 import base64
+import os
 import datetime
 from datetime import time
 from models.creador_de_eventos import Evento
@@ -7,7 +8,6 @@ from models.gestor_de_recursos import GestorEventos
 from models.validador_de_reglas import *
 
 def pagina_formulario():
-        # Inicializar gestor (puedes usar st.session_state para persistencia)
     if "gestor" not in st.session_state:
         st.session_state.gestor = GestorEventos()
 
@@ -37,17 +37,15 @@ def pagina_formulario():
     </style>
     """,  unsafe_allow_html=True)
 
-    # Convertir la imagen local a base64
+    #Convertir la imagen local a base64
     def get_base64_of_bin_file(bin_file):
         with open(bin_file, 'rb') as f:
             data = f.read()
         return base64.b64encode(data).decode()
 
-    # Ruta a tu imagen local
     img_path = "assets/main.png"
     img_base64 = get_base64_of_bin_file(img_path)
 
-    # Inyectar CSS con la imagen de fondo y formulario semitransparente
     st.markdown(f"""
     <style>
     [data-testid="stAppViewContainer"] {{
@@ -110,9 +108,6 @@ def pagina_formulario():
         text-decoration: none !important;
     }
 
-    /* Aplicar fuente a elementos específicos */
-
-    /* 1. Contenido principal de la app */
     .stApp, .block-container, .main, 
     .stTextInput, .stSelectbox, .stDateInput, .stTimeInput,
     .stMultiSelect, .stNumberInput, .stButton,
@@ -121,26 +116,22 @@ def pagina_formulario():
         font-family: Georgia, serif !important;
     }
 
-    /* 2. Labels de formularios */
     label[data-testid="stWidgetLabel"] p {
         font-family: Georgia, serif !important;
         font-size: 16px !important;
         color: #2a1a0a !important;
     }
 
-    /* 3. Inputs y controles */
     input, select, textarea, button:not(.streamlit-expanderHeader) {
         font-family: Georgia, serif !important;
         font-size: 16px !important;
     }
 
-    /* 4. Contenido dentro de expanders EXCLUYENDO el header */
     div[data-testid="stExpander"] div[role="region"] * {
         font-family: Georgia, serif !important;
         font-size: 16px !important;
     }
 
-    /* 5. CRUCIAL: Excluir COMPLETAMENTE el header del expander */
     div[data-testid="stExpander"] > details > summary,
     div[data-testid="stExpander"] div[role="button"],
     div[data-testid="stExpander"] .streamlit-expanderHeader,
@@ -149,20 +140,17 @@ def pagina_formulario():
         all: revert !important;
     }
 
-    /* 6. Asegurar que los íconos dentro del header usen la fuente Material Icons */
     div[data-testid="stExpander"] .streamlit-expanderHeader svg,
     div[data-testid="stExpander"] button[data-testid="baseButton-headerNoPadding"] svg {
         font-family: "Material Icons" !important;
     }
 
-    /* 7. Texto dentro del expander header */
     div[data-testid="stExpander"] div[role="button"] p,
     div[data-testid="stExpander"] .st-emotion-cache-16txtl3 {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
         font-weight: 600 !important;
     }
 
-    /* 8. ELIMINAR LA FLECHA NEGRA ADICIONAL (pseudo-elemento ::before) */
     div[data-testid="stExpander"] .streamlit-expanderHeader::before,
     div[data-testid="stExpander"] div[role="button"]::before,
     div[data-testid="stExpander"] button::before {
@@ -170,7 +158,6 @@ def pagina_formulario():
         display: none !important;
     }
 
-    /* 9. Eliminar cualquier otro pseudo-elemento que pueda causar flechas dobles */
     div[data-testid="stExpander"] summary::before,
     div[data-testid="stExpander"] summary::marker,
     div[data-testid="stExpander"] summary::-webkit-details-marker {
@@ -178,14 +165,12 @@ def pagina_formulario():
         content: "" !important;
     }
 
-    /* 10. Asegurar que solo quede el ícono de Material Icons */
     div[data-testid="stExpander"] .streamlit-expanderHeader {
         display: flex !important;
         align-items: center !important;
         gap: 8px !important;
     }
 
-    /* 11. Opcional: Mejorar el espaciado entre el emoji y el texto */
     div[data-testid="stExpander"] div[role="button"] {
         display: flex !important;
         align-items: center !important;
@@ -213,7 +198,7 @@ def pagina_formulario():
     """, unsafe_allow_html=True)
 
 
-    # --- Formulario para crear evento ---
+    #Formulario para crear evento
     with st.form("crear_evento"):
         title = st.text_input("Título del evento")
         type_of_event = st.selectbox("Tipo de evento", gestor.type_of_events)
@@ -226,10 +211,65 @@ def pagina_formulario():
         with col2: 
             finish_date = st.date_input("Fecha de fin", datetime.today()) 
             finish_time = st.time_input("Hora de fin", time(10, 0))
+        
+        warriors = []
+        
+        with st.expander("⚔️ Guerreros de la saga", expanded=False):
+            st.markdown("""
+            <style>
+            div[data-testid="stColumn"] label p {
+                font-size: 12px !important;
+                white-space: nowrap; 
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            div[data-testid="stColumn"] img {
+                width: 80px !important;
+                height: 80px !important;
+                object-fit: contain !important;
+            }
+            </style>
+            """, unsafe_allow_html=True)
 
-        warriors = st.multiselect("Guerreros de la saga", gestor.franquicia_warriors)
-        dragons = st.multiselect("Dragones de la saga", gestor.franquicia_dragons)
+            cols = st.columns(4)
+            for i, (warrior, img_path) in enumerate(gestor.franquicia_warriors.items()):
+                with cols[i % 4]:
+                    
+                    st.image(img_path, width=80)
+                    
+                    key_name = f"chk_warrior_{warrior}"
+                    if st.checkbox(warrior, key=key_name):
+                        warriors.append(warrior)
+        
+        dragons = []
+        
+        with st.expander("🐉 Dragones de la saga", expanded=False):
+            st.markdown("""
+            <style>
+            div[data-testid="stColumn"] label p {
+                font-size: 12px !important;
+                white-space: nowrap; 
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            div[data-testid="stColumn"] img {
+                width: 80px !important;
+                height: 80px !important;
+                object-fit: contain !important;
+            }
+            </style>
+            """, unsafe_allow_html=True)
 
+            cols = st.columns(4)
+            for i, (dragon, img_path) in enumerate(gestor.franquicia_dragons.items()):
+                with cols[i % 4]:
+                    
+                    st.image(img_path, width=80)
+                    
+                    key_name = f"chk_dragon_{dragon}"
+                    if st.checkbox(dragon, key=key_name):
+                        dragons.append(dragon)
+        
         with st.expander("⚔️ Guerreros de Berk"):
             randoms_selected = {}
             for grupo, cantidad in gestor.randoms_warriors.items():
@@ -252,27 +292,40 @@ def pagina_formulario():
             with st.expander("🛡️ Armas"):
                 weapons_selected = {}
                 for arma, cantidad in gestor.weapons.items():
-                    weapons_selected[arma] = st.number_input(
-                        f"{arma} (disponibles: {cantidad})", 
-                        min_value=0, max_value=cantidad, value=0
-                    )
+                    c1, c2 = st.columns([1, 5], gap="small")
+                    with c1:
+                        if hasattr(gestor, 'weapons_images') and arma in gestor.weapons_images:
+                            st.image(gestor.weapons_images[arma], width=100)
+                    with c2:
+                        weapons_selected[arma] = st.number_input(
+                            f"{arma} (disponibles: {cantidad})", 
+                            min_value=0, max_value=cantidad, value=0, label_visibility="collapsed"
+                        )
 
         with col_armaduras:
             with st.expander("🥋 Armaduras"):
                 armors_selected = {}
                 for armadura, cantidad in gestor.armors.items():
-                    armors_selected[armadura] = st.number_input(
-                        f"{armadura} (disponibles: {cantidad})", 
-                        min_value=0, max_value=cantidad, value=0
-                    )
+                    c1, c2 = st.columns([1, 5], gap="small")
+                    with c1:
+                        if hasattr(gestor, 'armors_images') and armadura in gestor.armors_images:
+                            st.image(gestor.armors_images[armadura], width=100)
+                    with c2:
+                        armors_selected[armadura] = st.number_input(
+                            f"{armadura} (disponibles: {cantidad})", 
+                            min_value=0, max_value=cantidad, value=0, label_visibility="collapsed"
+                        )
 
-        with st.expander("🐑 Ovejas"):
-            ovejas_selected = st.number_input(
-                f"Ovejas (disponibles: {gestor.ovejas})", 
-                min_value=0, max_value=gestor.ovejas, value=0
-            )
+        with st.expander("🐑 Ovejas"):  
+                c1, c2 = st.columns([1, 5], gap="small")
+                with c1:
+                    st.image("assets/sheeps/oveja.png", width=100)
+                with c2:
+                    ovejas_selected = st.number_input(
+                    f"Ovejas (disponibles: {gestor.ovejas})", 
+                    min_value=0, max_value=gestor.ovejas, value=0
+                )
 
-        # --- Botones en extremos ---
         col_left, col_spacer, col_right = st.columns([1,2,1])
 
         with col_left:
@@ -281,7 +334,6 @@ def pagina_formulario():
         with col_right:
             reset = st.form_submit_button("Borrar formulario")
 
-        # Lógica de los botones
         if reset:
             st.session_state.clear()
             st.rerun()
@@ -325,7 +377,7 @@ def pagina_formulario():
                 st.stop()
 
             #Regla 2: Verificar participacion diaria
-            participacion_diaria, msg = verificar_participacion_diaria(gestor, warriors, dragons, str(start_date)) 
+            participacion_diaria, msg = verificar_participacion_diaria(gestor, warriors, dragons, start_date) 
             if not participacion_diaria: 
                 st.error(msg) 
                 st.stop()
@@ -336,7 +388,7 @@ def pagina_formulario():
                 st.error(msg) 
                 st.stop()
 
-            #Regla 4: Veificacion del Cremallerus
+            #Regla 4: Verificacion del Cremallerus
             cremallerus_ok, msg = verificacion_del_cremallerus(gestor, type_of_event, dragons, free_dragons_selected, warriors, randoms_selected) 
             if not cremallerus_ok: 
                 st.error(msg) 
@@ -404,8 +456,8 @@ def pagina_formulario():
 
                 if start_date not in gestor.daily_participation: 
                     gestor.daily_participation[start_date] = {"guerreros": set(), "dragones": set()} 
-                gestor.daily_participation[start_date]["guerreros"].update(new_evento.warriors) 
-                gestor.daily_participation[start_date]["dragones"].update(new_evento.dragons)
+                gestor.daily_participation[start_date]["guerreros"].update(new_evento.franquicia_warriors) 
+                gestor.daily_participation[start_date]["dragones"].update(new_evento.franquicia_dragons)
 
 
                 gestor.guardar_en_json()

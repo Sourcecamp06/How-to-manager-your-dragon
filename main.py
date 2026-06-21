@@ -16,7 +16,6 @@ def get_base64_of_bin_file(bin_file):
     return base64.b64encode(data).decode()
 
 
-# Ruta a tu imagen local
 img_path = "assets/main.png"
 img_base64 = get_base64_of_bin_file(img_path)
 
@@ -68,7 +67,6 @@ st.markdown(
         box-sizing: border-box;
     }}
     
-    /* CONTENEDOR FLEX PARA BOTONES PEGADOS A EXTREMOS */
     .buttons-container {{
         grid-column: 1 / 3;
         grid-row: 2 / 3;
@@ -118,7 +116,6 @@ st.markdown(
 
 
 def main_menu():
-    # Contenedor principal
     st.markdown(
         """
     <div class="main-container">
@@ -128,17 +125,14 @@ def main_menu():
         unsafe_allow_html=True,
     )
 
-    # Crear un contenedor flex dentro del grid
     col1, spacer, col2 = st.columns([1, 1, 1])
 
     with col1:
-        # Botón izquierdo - PEGADO A LA IZQUIERDA
         if st.button("Añadir evento", key="new_event_btn"):
             st.session_state.page = "añadir_evento"
             st.rerun()
 
     with col2:
-        # Botón derecho - PEGADO A LA DERECHA
         if st.button("Eventos activos", key="edit_events_btn"):
             st.session_state.page = "eventos_activos"
             st.rerun()
@@ -152,7 +146,6 @@ def main_menu():
     )
 
 
-# --- Router de páginas ---
 page = st.session_state.page
 
 if page == "home":

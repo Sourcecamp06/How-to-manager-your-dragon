@@ -14,28 +14,20 @@ def obtener_clave_por_valor(diccionario, valor_buscado):
 
 #Regla 2
 def verificar_participacion_diaria(gestor, guerreros, dragones, fecha):
-    """
-    Verifica si los guerreros/dragones de la franquicia ya participaron en un evento en la fecha dada.
-    Si no han participado, los registra en la participación diaria.
-    """
     if fecha not in gestor.daily_participation:
-        gestor.daily_participation[fecha] = {"guerreros": set(), "dragones": set()}
+        return True, ""
 
-    # Verificar guerreros
-    for guerrero in guerreros:
-        if guerrero in gestor.franquicia_warriors:
-            if guerrero in gestor.daily_participation[fecha]["guerreros"]:
-                return False, f"El guerrero {guerrero} ya participa en un evento hoy"
-            # Registrar participación
-            gestor.daily_participation[fecha]["guerreros"].add(guerrero)
+    guerreros_franquicia = [g for g in guerreros if g in gestor.franquicia_warriors]
+    dragones_franquicia = [d for d in dragones if d in gestor.franquicia_dragons]
 
-    # Verificar dragones
-    for dragon in dragones:
-        if dragon in gestor.franquicia_dragons:
-            if dragon in gestor.daily_participation[fecha]["dragones"]:
-                return False, f"El dragón {dragon} ya participa en un evento hoy"
-            # Registrar participación
-            gestor.daily_participation[fecha]["dragones"].add(dragon)
+    # Verificar disponibilidad
+    for guerrero in guerreros_franquicia:
+        if guerrero in gestor.daily_participation[fecha]["guerreros"]:
+            return False, f"El guerrero {guerrero} ya participa en un evento hoy"
+
+    for dragon in dragones_franquicia:
+        if dragon in gestor.daily_participation[fecha]["dragones"]:
+            return False, f"El dragón {dragon} ya participa en un evento hoy"
 
     return True, ""
 
@@ -87,6 +79,7 @@ def verificacion_del_cremallerus(gestor, tipo_evento, dragons, free_dragons, war
             return False, "No hay suficientes dragones"
         
     return True, ""
+
 
 #Regla 5
 def verificacion_evento_ovejas(gestor, tipo_evento:str, arena:str, extra:int):
